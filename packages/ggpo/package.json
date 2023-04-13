@@ -1,0 +1,20 @@
+{
+  "name": "ggpo",
+  "version": "0.0.0",
+  "private": true,
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
+  "devDependencies": {
+    "eslint": "^7.32.0",
+    "eslint-config-custom": "workspace:*",
+    "react": "^17.0.2",
+    "tsconfig": "workspace:*",
+    "typescript": "^4.5.2",
+    "shared": "workspace:*"
+  },
+  "dependencies": {
+    "trystero": "^0.11.8"
+  }
+}
