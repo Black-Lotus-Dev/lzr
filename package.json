@@ -1,6 +1,8 @@
 {
   "private": true,
   "scripts": {
+    "atlas:local": "turbo run dev --filter atlas",
+    "atlas:dev": "turbo run dev",
     "build": "turbo run build",
     "dev": "turbo run dev",
     "lint": "turbo run lint",

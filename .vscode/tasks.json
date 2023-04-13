@@ -1,0 +1,19 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "atlas:local",
+      "type": "shell",
+      "isBackground": true,
+      "command": "pnpm",
+      "args": ["run", "atlas:local"]
+    },
+    {
+      "label": "atlas:dev",
+      "type": "shell",
+      "isBackground": true,
+      "command": "pnpm",
+      "args": ["run", "atlas:dev"]
+    }
+  ]
+}
