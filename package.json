@@ -1,14 +1,15 @@
 {
   "private": true,
   "scripts": {
-    "atlas:local": "turbo run dev --filter atlas",
-    "atlas:dev": "turbo run dev",
+    "dev": "concurrently \"pnpm run atlas:dev\" \"pnpm run bast:dev\"",
+    "atlas:dev": "cd apps/atlas && pnpm run tauri:dev",
+    "bast:dev": "turbo run dev --filter bast",
     "build": "turbo run build",
-    "dev": "turbo run dev",
     "lint": "turbo run lint",
     "format": "prettier --write \"**/*.{ts,tsx,md}\""
   },
   "devDependencies": {
+    "concurrently": "^8.0.1",
     "eslint": "^7.32.0",
     "eslint-config-custom": "workspace:*",
     "prettier": "^2.5.1",

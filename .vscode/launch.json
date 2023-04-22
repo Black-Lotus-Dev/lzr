@@ -2,21 +2,30 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "Front-end App Debug",
+      "name": "Start apps",
+      "type": "node",
+      "request": "launch",
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": ["run", "dev"],
+      "console": "integratedTerminal",
+      "restart": true
+    },
+    {
+      "name": "Front-end App local",
       "type": "msedge",
       "port": 9222,
       "request": "launch",
-      "runtimeExecutable": "${workspaceFolder}/apps/atlas/src-tauri/target/debug/lzr.exe", // Remember to edit the right path to your app.
+      "runtimeExecutable": "${workspaceFolder}/apps/atlas/src-tauri/target/debug/altas.exe",
       "useWebView": true,
       "webRoot": "${workspaceFolder}/apps/atlas",
       "preLaunchTask": "atlas:local"
     },
     {
-      "name": "Front-end App Prod",
+      "name": "Front-end App Dev",
       "type": "msedge",
       "port": 9222,
       "request": "launch",
-      "runtimeExecutable": "${workspaceFolder}/apps/atlas/src-tauri/target/debug/lzr.exe", // Remember to edit the right path to your app.
+      "runtimeExecutable": "${workspaceFolder}/apps/atlas/src-tauri/target/debug/altas.exe",
       "useWebView": true,
       "webRoot": "${workspaceFolder}/apps/atlas",
       "preLaunchTask": "atlas:dev"

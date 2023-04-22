@@ -1,6 +1,6 @@
 import { _ } from "shared/utils";
 import { joinRoom, Room, selfId } from "trystero";
-import { LZRChannel } from "./channel";
+import LZRChannel from "./channel";
 
 const config = { appId: "https://logoszr-bot-default-rtdb.firebaseio.com" };
 
@@ -9,6 +9,11 @@ interface Peer {
   id: string;
   channels: string[];
 }
+
+type ChannelEvent = {
+  channel: string;
+  data: any;
+};
 
 class Guest {
   //details about the guest
@@ -25,14 +30,13 @@ class Guest {
   private hostId?: string;
 
   public channels: {
-    [key: string]: LZRChannel<any>;
+    [key: string]: LZRChannel;
   } = {};
-  public queuedEvents: {
-    [key: string]: any;
-  };
+
+  public queuedEvents: ChannelEvent[] = [];
   public closeLzrRoom: () => void = () => {};
   public notifySubscribers: (roomId: string) => void = () => {};
-  public channelSub: LZRChannel<string>;
+  public channelSub: LZRChannel;
 
   constructor(name: string, roomId: string) {
     this.name = name;
@@ -66,6 +70,9 @@ class Guest {
       });
 
       this.notifySubscribers(this.roomId);
+
+      //call queued events
+      this.runQueuedEvents();
     });
 
     //listen for the host to disconnect
@@ -78,6 +85,18 @@ class Guest {
 
     kickPeerAction.get(() => {
       this.room.leave();
+    });
+  }
+
+  private runQueuedEvents() {
+    Object.keys(this.queuedEvents).forEach((channel) => {
+      const queuedChannelEvents = this.queuedEvents.filter(
+        (x) => x.channel === channel
+      );
+
+      queuedChannelEvents.forEach((event) => {
+        this.channels[channel].send(event.data);
+      });
     });
   }
 
@@ -97,7 +116,7 @@ class Guest {
     //check if the host is connected
     if (!this.hostId) {
       //if not queue the event
-      this.queuedEvents[channel] = data;
+      this.queuedEvents.push({ channel, data });
       return;
     }
 
@@ -105,21 +124,17 @@ class Guest {
     this.channels[channel]._send(data, this.hostId);
   };
 
-  public createChannel<T>(channel: string): LZRChannel<T> {
+  public createChannel(channel: string): LZRChannel {
     if (!this.channels[channel]) {
-      const [send, get, progress] = this.room.makeAction<T>(channel);
-
-      const lzrSendAction = (data: T) => this.handleSendAction(channel, data);
-      this.channels[channel] = {
-        send: lzrSendAction,
-        _send: send,
-        get,
-        progress,
-      };
+      const lzrChannel = new LZRChannel(this.room, channel, this.name);
+      this.channels[channel] = lzrChannel;
 
       //if the host is connected, send the channel name to the host
       if (this.hostId) {
         this.channelSub.send(channel);
+      } else {
+        //if the host is not connected, queue the event
+        this.queuedEvents.push({ channel, data: channel });
       }
     }
 

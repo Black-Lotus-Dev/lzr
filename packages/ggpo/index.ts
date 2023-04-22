@@ -1,4 +1,4 @@
-import { LZRChannel } from "./channel";
+import LZRChannel from "./channel";
 import LZRGuest from "./guest";
 import LZRHost from "./host";
 
