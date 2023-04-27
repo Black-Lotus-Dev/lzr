@@ -1,6 +1,6 @@
 import { _ } from "shared/utils";
 import { joinRoom, Room, selfId } from "trystero";
-import LZRChannel from "./channel";
+import { LZRChannel } from "./channel";
 
 const config = { appId: "https://logoszr-bot-default-rtdb.firebaseio.com" };
 
@@ -30,13 +30,13 @@ class Guest {
   private hostId?: string;
 
   public channels: {
-    [key: string]: LZRChannel;
+    [key: string]: LZRChannel<any>;
   } = {};
 
   public queuedEvents: ChannelEvent[] = [];
   public closeLzrRoom: () => void = () => {};
   public notifySubscribers: (roomId: string) => void = () => {};
-  public channelSub: LZRChannel;
+  public channelSub: LZRChannel<any>;
 
   constructor(name: string, roomId: string) {
     this.name = name;
@@ -54,7 +54,7 @@ class Guest {
   private connectToHost() {
     const auth = this.createChannel<Peer>("room-auth");
     const kickPeerAction = this.createChannel<0>("kick-peer");
-    this.channelSub = this.createChannel<string>("lzr-channel");
+    this.channelSub = this.createChannel<string>("channel");
 
     //this handles the auth details received from guests
     auth.get((host: Peer, hostId: string) => {
@@ -124,17 +124,21 @@ class Guest {
     this.channels[channel]._send(data, this.hostId);
   };
 
-  public createChannel(channel: string): LZRChannel {
+  public createChannel<T>(channel: string): LZRChannel<T> {
     if (!this.channels[channel]) {
-      const lzrChannel = new LZRChannel(this.room, channel, this.name);
-      this.channels[channel] = lzrChannel;
+      const [send, get, progress] = this.room.makeAction<T>(channel);
+
+      const lzrSendAction = (data: T) => this.handleSendAction(channel, data);
+      this.channels[channel] = {
+        send: lzrSendAction,
+        _send: send,
+        get,
+        progress,
+      };
 
       //if the host is connected, send the channel name to the host
       if (this.hostId) {
         this.channelSub.send(channel);
-      } else {
-        //if the host is not connected, queue the event
-        this.queuedEvents.push({ channel, data: channel });
       }
     }
 

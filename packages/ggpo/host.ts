@@ -68,7 +68,7 @@ class Host {
   }
 
   private channelSubListener() {
-    const channelSubAction = this.createChannel<string>("lzr-channel");
+    const channelSubAction = this.createChannel<string>("channel");
     channelSubAction.get((channel, guestId) => {
       //if we dont know the guest, ignore them
       if (!this.guests[guestId]) return;
