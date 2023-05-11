@@ -1,3 +1,4 @@
+import React from "react";
 import { FirebaseAppProvider } from "reactfire";
 import { NextPage } from "next";
 import type { AppProps } from "next/app";
@@ -21,12 +22,8 @@ const ethno = localFont({
   variable: "--font-ethno",
 });
 
-type NextPageWithLayout = NextPage & {
-  getLayout?: (page: React.ReactElement) => React.ReactNode;
-};
-
 type AppPropsWithLayout = AppProps & {
-  Component: NextPageWithLayout;
+  Component: NextPage<any, any>;
 };
 
 const App: React.FC<AppPropsWithLayout> = ({ Component, pageProps }) => {
