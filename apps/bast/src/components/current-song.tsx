@@ -59,8 +59,8 @@ function CurrentSongOverlay() {
 	const colorPalette = useRef<FinalColor[] | undefined>(userColorPalette);
 
 	useEffect(() => {
-		runAnim();
-	}, [song]);
+    runAnim();
+  }, [song]);
 
 	useEffect(() => {
 		const unsubscribe = storeWatch<MusicState>((newVal, oldVal) => {
