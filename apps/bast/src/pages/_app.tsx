@@ -1,6 +1,5 @@
 import { FirebaseAppProvider } from "reactfire";
-import { ReactElement, ReactNode, useEffect } from "react";
-import type { NextPage } from "next";
+import { NextPage } from "next";
 import type { AppProps } from "next/app";
 import { firebaseConfig } from "@configs/firebase";
 import { Toaster } from "react-hot-toast";
@@ -22,15 +21,15 @@ const ethno = localFont({
   variable: "--font-ethno",
 });
 
-export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
-  getLayout?: (page: ReactElement) => ReactNode;
+type NextPageWithLayout = NextPage & {
+  getLayout?: (page: React.ReactElement) => React.ReactNode;
 };
 
 type AppPropsWithLayout = AppProps & {
   Component: NextPageWithLayout;
 };
 
-export default function App({ Component, pageProps }: AppPropsWithLayout) {
+const App: React.FC<AppPropsWithLayout> = ({ Component, pageProps }) => {
   const router = useRouter();
 
   //parse the route path and see if the first node is a protected route
@@ -54,4 +53,6 @@ export default function App({ Component, pageProps }: AppPropsWithLayout) {
       </Provider>
     </main>
   );
-}
+};
+
+export default App;
