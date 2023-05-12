@@ -15,17 +15,21 @@ class LzrRoom {
 
   private notifyHostSubs = (roomId: string) => {
     const host = this.getHost(roomId);
-    if (this.hostSubs[roomId]) {
-      this.hostSubs[roomId].forEach((cb) => cb(host));
-      delete this.hostSubs[roomId];
+
+    const hostSubs = this.hostSubs.get(roomId);
+    if (hostSubs) {
+      hostSubs.forEach((cb) => cb(host!));
+      this.hostSubs.delete(roomId);
     }
   };
 
   private notifyGuestSubs = (roomId: string) => {
     const guest = this.getGuest(roomId);
-    if (this.guestSubs[roomId]) {
-      this.guestSubs[roomId].forEach((cb) => cb(guest));
-      delete this.guestSubs[roomId];
+
+    const guestSubs = this.guestSubs.get(roomId);
+    if (guestSubs) {
+      guestSubs.forEach((cb) => cb(guest!));
+      this.guestSubs.delete(roomId);
     }
   };
 
@@ -37,9 +41,12 @@ class LzrRoom {
     this.hosts.push(host);
 
     //if there are any subscribers waiting for a host to be created, call their callbacks
-    if (this.hostSubs[host.id]) {
-      this.hostSubs[host.id].forEach((cb) => cb(host));
-      delete this.hostSubs[host.id];
+
+    const hostSubs = this.hostSubs.get(host.id);
+
+    if (hostSubs) {
+      hostSubs.forEach((cb) => cb(host));
+      this.hostSubs.delete(host.id);
     }
 
     return host;
@@ -51,9 +58,11 @@ class LzrRoom {
     this.guests.push(guest);
 
     //if there are any subscribers waiting for a guest to be created, call their callbacks
-    if (this.guestSubs[roomId]) {
-      this.guestSubs[roomId].forEach((cb) => cb(guest));
-      delete this.guestSubs[roomId];
+    const guestSubs = this.guestSubs.get(guest.id);
+
+    if (guestSubs) {
+      guestSubs.forEach((cb) => cb(guest));
+      this.guestSubs.delete(guest.id);
     }
 
     return guest;
@@ -87,10 +96,13 @@ class LzrRoom {
     if (host) {
       cb(host);
     } else {
-      if (!this.hostSubs[roomId]) {
-        this.hostSubs[roomId] = [];
+      const hostSubs = this.hostSubs.get(roomId);
+
+      if (hostSubs) {
+        hostSubs.push(cb);
+      } else {
+        this.hostSubs.set(roomId, [cb]);
       }
-      this.hostSubs[roomId].push(cb);
     }
   };
 
@@ -99,10 +111,13 @@ class LzrRoom {
     if (guest && guest.isConnected) {
       cb(guest);
     } else {
-      if (!this.guestSubs[roomId]) {
-        this.guestSubs[roomId] = [];
+      const guestSubs = this.guestSubs.get(roomId);
+
+      if (guestSubs) {
+        guestSubs.push(cb);
+      } else {
+        this.guestSubs.set(roomId, [cb]);
       }
-      this.guestSubs[roomId].push(cb);
     }
   };
 }

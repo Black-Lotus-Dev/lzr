@@ -9,7 +9,6 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "ggpo": "workspace:*",
     "@rematch/core": "^2.2.0",
     "@twurple/chat": "^6.0.9",
     "@types/chroma-js": "^2.4.0",
@@ -26,6 +25,7 @@
     "extract-colors": "^2.0.5",
     "firebase": "^9.17.1",
     "framer-motion": "^9.0.4",
+    "ggpo": "workspace:*",
     "lodash": "^4.17.21",
     "next": "latest",
     "next-videos": "^1.4.1",
@@ -45,6 +45,7 @@
     "@types/node": "^17.0.43",
     "@types/react": "^18.0.12",
     "@types/react-dom": "^18.0.5",
+    "@types/redux-watch": "^1.1.0",
     "autoprefixer": "^10.4.13",
     "cross-env": "^7.0.3",
     "postcss": "^8.4.21",

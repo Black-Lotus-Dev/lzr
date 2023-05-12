@@ -18,7 +18,7 @@ type ChannelEvent = {
 class Guest {
   //details about the guest
   public name: string;
-  private id: string;
+  public id: string;
   public isConnected: boolean = false;
 
   //details about the room
@@ -36,17 +36,14 @@ class Guest {
   public queuedEvents: ChannelEvent[] = [];
   public closeLzrRoom: () => void = () => {};
   public notifySubscribers: (roomId: string) => void = () => {};
-  public channelSub: LZRChannel<any>;
+  public channelSub: LZRChannel<any> = {} as LZRChannel<any>;
 
   constructor(name: string, roomId: string) {
     this.name = name;
+    this.roomName = name;
     this.roomId = roomId;
     this.id = selfId;
 
-    this.joinRoom();
-  }
-
-  private joinRoom() {
     this.room = joinRoom(config, this.roomId);
     this.connectToHost();
   }

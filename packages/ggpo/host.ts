@@ -39,14 +39,18 @@ class Host {
 
   constructor(name: string, roomId?: string) {
     this.name = name;
+    this.roomName = name;
     this.roomId = roomId || createRandString();
     this.id = selfId;
+    
+    this.room = joinRoom(config, this.roomId);
     this.startRoom();
+    
+    this.kickPeer = this.room.makeAction<0>("kick-peer")[0];
   }
 
   //this function will start the room and kick off the host peer
   private startRoom() {
-    this.room = joinRoom(config, this.roomId);
     this.notifySubscribers(this.roomId);
 
     //start the host peer
@@ -54,8 +58,6 @@ class Host {
 
     //start the channel sub listener
     this.channelSubListener();
-
-    this.kickPeer = this.room.makeAction<0>("kick-peer")[0];
   }
 
   public setCloseHostFunc = (cb: () => void) => {

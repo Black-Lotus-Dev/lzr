@@ -1,3 +1,4 @@
+import React from "react";
 import { getAuth } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
@@ -8,7 +9,7 @@ import {
   StorageProvider,
 } from "reactfire";
 
-export function FireWrapper({ children }) {
+export function FireWrapper({ children }: { children: React.ReactNode }) {
   const app = useFirebaseApp();
   const auth = getAuth(app);
   const db = getFirestore(app);

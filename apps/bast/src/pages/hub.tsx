@@ -26,10 +26,7 @@ export default function Hub() {
       }
 
       if (event === "get-settings") {
-        const { wsIp, wsPort, wsPassword } = this.store.state;
-        const settings = { wsIp, wsPort, wsPassword };
-
-        emitObsRequest("set-settings", settings);
+        emitObsRequest("get-settings");
       } else if (event === "obs-client") {
         // we just started the obs client on the lzr app
         emitObsRequest("set-settings");
