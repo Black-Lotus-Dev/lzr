@@ -26,7 +26,7 @@ type AppPropsWithLayout = AppProps & {
   Component: NextPage<any, any>;
 };
 
-const App: React.FC<AppPropsWithLayout> = ({ Component, pageProps }) => {
+const App = ({ Component, pageProps }: AppPropsWithLayout) => {
   const router = useRouter();
 
   //parse the route path and see if the first node is a protected route
