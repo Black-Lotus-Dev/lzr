@@ -26,7 +26,7 @@
     "extract-colors": "^2.0.5",
     "firebase": "^9.17.1",
     "framer-motion": "^9.0.4",
-    "@black-lotus-dev/ggpo": "workspace:*",
+    "@black-lotus-dev/ggpo": "0.0.1",
     "lodash": "^4.17.21",
     "next": "latest",
     "next-videos": "^1.4.1",
