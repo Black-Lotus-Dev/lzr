@@ -1,4 +1,4 @@
-import { _ } from "shared/utils";
+import _ from "lodash";
 import { joinRoom, Room, selfId } from "trystero";
 import { LZRChannel } from "./channel";
 

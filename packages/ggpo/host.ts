@@ -1,6 +1,6 @@
 //this is the host peer that will be used to host the room
 
-import { createRandString, _ } from "shared/utils";
+import { createRandString, _ } from "@black-lotus-dev/shared/utils"
 import { ActionSender, joinRoom, Room, selfId } from "trystero";
 import { LZRChannel } from "./channel";
 const config = { appId: "https://logoszr-bot-default-rtdb.firebaseio.com" };

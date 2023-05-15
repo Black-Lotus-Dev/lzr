@@ -20,7 +20,7 @@ import toast from "react-hot-toast";
 import GlobalLoader from "@/components/loader/loader";
 import { mainTwitchClient } from "@/lzrClients/twitch/client";
 import { useStoreWatch } from "@/utils/storeWatch";
-import { hostLzrRoom } from "ggpo";
+import { hostLzrRoom } from "@black-lotus-dev/ggpo";
 import { runUserAuthSubscribers } from "@/utils/user";
 import { hub } from "@/lzrClients/hub/client";
 

@@ -2,7 +2,7 @@ import axios from "axios";
 import { GetServerSideProps } from "next";
 import { useEffect, useRef } from "react";
 import { apiUrl } from "../configs/auth";
-import { joinLzrRoom } from "ggpo";
+import { joinLzrRoom } from "@black-lotus-dev/ggpo";
 import toast from "react-hot-toast";
 import { useAuth } from "reactfire";
 import { signInWithCustomToken } from "firebase/auth";

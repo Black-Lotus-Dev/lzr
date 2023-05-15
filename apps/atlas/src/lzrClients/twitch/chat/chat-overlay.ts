@@ -1,5 +1,5 @@
 import { getApiClient } from "@lzrClients/twitch/client";
-import { LZRChannel } from "ggpo";
+import { LZRChannel } from "@black-lotus-dev/ggpo";
 import { TwitchPrivateMessage } from "@twurple/chat/lib/commands/TwitchPrivateMessage";
 import { ApiClient, ChatEmote } from "@twurple/api/lib";
 import chroma from "chroma-js";

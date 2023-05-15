@@ -6,7 +6,7 @@ import _ from "lodash";
 import { getUserId } from "@utils/user";
 import { extractColors } from "extract-colors";
 import { FinalColor } from "extract-colors/lib/types/Color";
-import { LZRChannel, LZRHost } from "ggpo";
+import { LZRChannel, LZRHost } from "@black-lotus-dev/ggpo";
 import toast from "react-hot-toast";
 import { waitForLzrRoom } from "@/utils/rtc";
 

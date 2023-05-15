@@ -5,7 +5,7 @@ import { useDispatch, useStore } from "react-redux";
 import { ReduxDispatch, ReduxStore } from "../redux/store";
 import storeWatch from "../utils/store-watch";
 import { UserState } from "../redux/slices/user";
-import { joinLzrRoom } from "ggpo";
+import { joinLzrRoom } from "@black-lotus-dev/ggpo";
 import { runUserAuthSubscribers } from "@utils/user";
 
 interface ProtectedRouteProps {

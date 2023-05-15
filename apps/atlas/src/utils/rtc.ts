@@ -1,4 +1,4 @@
-import { LZRHostCb, waitForLzrHost } from "ggpo";
+import { LZRHostCb, waitForLzrHost } from "@black-lotus-dev/ggpo";
 import { waitForUserAuth } from "./user";
 
 export function waitForLzrRoom(name: string, cb: LZRHostCb) {

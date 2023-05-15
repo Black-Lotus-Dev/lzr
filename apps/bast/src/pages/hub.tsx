@@ -1,4 +1,4 @@
-import { LZRChannel, LZRGuest } from "ggpo";
+import { LZRChannel, LZRGuest } from "@black-lotus-dev/ggpo";
 import { waitForLzrRoom } from "@utils/rtc";
 import { motion } from "framer-motion";
 import { useEffect, useRef, useState } from "react";

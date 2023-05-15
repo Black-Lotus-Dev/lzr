@@ -29,7 +29,6 @@
       "@styles/*": ["./styles/*"],
       "@utils/*": ["./utils/*"]
     },
-    "strictNullChecks": true
   },
   "include": [
     "next-env.d.ts",

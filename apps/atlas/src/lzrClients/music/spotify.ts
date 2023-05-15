@@ -13,7 +13,7 @@ import axios from "axios";
 import { BehaviorSubject, of, pairwise, switchMap } from "rxjs";
 import { reduxStore } from "@redux/store";
 import { BaseSong, LZRSongItem } from "./client";
-import { hostLzrRoom } from "ggpo";
+import { hostLzrRoom } from "@black-lotus-dev/ggpo";
 import { fetchApi } from "@utils/fetchApi";
 import { GetRefreshableUserTokensResponse } from "spotify-web-api-ts/types/types/SpotifyAuthorization";
 import { createLzrStore } from "@/utils/lzrStore";

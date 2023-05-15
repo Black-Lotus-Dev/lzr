@@ -1,5 +1,5 @@
 import _ from "lodash";
-import { LZRChannel } from "ggpo";
+import { LZRChannel } from "@black-lotus-dev/ggpo";
 
 import generationJson from "./genNameList.json";
 import pokemon from "./pkList.json";
