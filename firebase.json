@@ -29,8 +29,5 @@
     },
     "singleProjectMode": true
   },
-  "remoteconfig": {
-    "template": "remoteconfig.template.json"
-  },
   "extensions": {}
 }

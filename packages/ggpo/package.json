@@ -1,18 +1,16 @@
 {
   "name": "@black-lotus-dev/ggpo",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "license": "MIT",
   "devDependencies": {
-    "@black-lotus-dev/eslint": "0.0.1",
-    "@black-lotus-dev/shared": "0.0.1",
-    "@black-lotus-dev/tsconfig": "1.0.1",
-    "@types/lodash": "^4.14.194",
+    "@black-lotus-dev/eslint": "0.0.3",
+    "@black-lotus-dev/shared": "0.0.2",
+    "@black-lotus-dev/tsconfig": "0.0.1",
     "eslint": "^7.32.0",
     "react": "^17.0.2",
-    "typescript": "^4.5.2"
+    "typescript": "5.0.2"
   },
   "dependencies": {
-    "lodash": "^4.17.21",
     "trystero": "^0.11.8"
   },
   "description": "internal webrtc lib"

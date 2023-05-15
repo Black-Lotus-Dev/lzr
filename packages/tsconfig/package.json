@@ -1,9 +1,6 @@
 {
-  "name": "tsconfig",
-  "version": "0.0.0",
-  "private": true,
+  "name": "@black-lotus-dev/tsconfig",
+  "version": "0.0.1",
   "license": "MIT",
-  "publishConfig": {
-    "access": "public"
-  }
+  "description": "shared tsconfig for internal bld projects"
 }
