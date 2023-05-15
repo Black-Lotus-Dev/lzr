@@ -3,9 +3,9 @@
   "version": "0.0.1",
   "license": "MIT",
   "devDependencies": {
-    "@black-lotus-dev/eslint": "0.0.1",
-    "@black-lotus-dev/shared": "0.0.1",
-    "@black-lotus-dev/tsconfig": "1.0.1",
+    "@black-lotus-dev/eslint": "workspace:*",
+    "@black-lotus-dev/shared": "workspace:*",
+    "@black-lotus-dev/tsconfig": "workspace:*",
     "@types/lodash": "^4.14.194",
     "eslint": "^7.32.0",
     "react": "^17.0.2",
