@@ -1,5 +1,6 @@
-import { LZRChannel, LZRGuest } from "@black-lotus-dev/ggpo";
-import { waitForLzrRoom } from "@utils/rtc";
+import { LZRGuest } from "ggpo";
+import { LZRChannel } from "ggpo/types";
+import { waitForLZRRoom } from "@utils/rtc";
 import { motion } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
 
@@ -17,7 +18,7 @@ export default function Hub() {
     if (!room) return;
     hubChannel.current = room.createChannel<string>("hub");
 
-    hubChannel.current.get((res) => {
+    hubChannel.current!.get((res) => {
       const { event, data } = JSON.parse(res);
 
       if (event === "connect-request") {
@@ -41,7 +42,7 @@ export default function Hub() {
   }, [room]);
 
   useEffect(() => {
-    waitForLzrRoom("hub", (room) => {
+    waitForLZRRoom("hub", (room) => {
       setRoom(room);
     });
   }, []);

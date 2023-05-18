@@ -1,0 +1,50 @@
+[debug] [2023-05-16T04:36:35.195Z] ----------------------------------------------------------------------
+[debug] [2023-05-16T04:36:35.196Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\woods\AppData\Local\pnpm\global\5\node_modules\firebase-tools\lib\bin\firebase.js deploy
+[debug] [2023-05-16T04:36:35.197Z] CLI Version:   12.0.0
+[debug] [2023-05-16T04:36:35.197Z] Platform:      win32
+[debug] [2023-05-16T04:36:35.197Z] Node Version:  v19.8.1
+[debug] [2023-05-16T04:36:35.197Z] Time:          Mon May 15 2023 23:36:35 GMT-0500 (Central Daylight Time)
+[debug] [2023-05-16T04:36:35.197Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2023-05-16T04:36:35.238Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2023-05-16T04:36:35.238Z] > authorizing via signed-in user (woods.aaronz@gmail.com)
+[debug] [2023-05-16T04:36:35.239Z] [iam] checking project logoszr-bot for permissions ["firebase.projects.get","firebasehosting.sites.update","firebaserules.releases.create","firebaserules.releases.update","firebaserules.rulesets.create",null]
+[debug] [2023-05-16T04:36:35.240Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects/logoszr-bot:testIamPermissions [none]
+[debug] [2023-05-16T04:36:35.240Z] >>> [apiv2][(partial)header] POST https://cloudresourcemanager.googleapis.com/v1/projects/logoszr-bot:testIamPermissions x-goog-quota-user=projects/logoszr-bot
+[debug] [2023-05-16T04:36:35.240Z] >>> [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/logoszr-bot:testIamPermissions {"permissions":["firebase.projects.get","firebasehosting.sites.update","firebaserules.releases.create","firebaserules.releases.update","firebaserules.rulesets.create",null]}
+[debug] [2023-05-16T04:36:35.392Z] <<< [apiv2][status] POST https://cloudresourcemanager.googleapis.com/v1/projects/logoszr-bot:testIamPermissions 200
+[debug] [2023-05-16T04:36:35.393Z] <<< [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/logoszr-bot:testIamPermissions {"permissions":["firebase.projects.get","firebasehosting.sites.update","firebaserules.releases.create","firebaserules.releases.update","firebaserules.rulesets.create"]}
+[debug] [2023-05-16T04:36:35.393Z] [iam] error while checking permissions, command may fail: FirebaseError: Authorization failed. This account is missing the following required permissions on project logoszr-bot:
+
+  
+[debug] [2023-05-16T04:36:35.393Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/logoszr-bot [none]
+[debug] [2023-05-16T04:36:35.594Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/logoszr-bot 200
+[debug] [2023-05-16T04:36:35.594Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/logoszr-bot {"projectId":"logoszr-bot","projectNumber":"574475610187","displayName":"LogosZR Bot","name":"projects/logoszr-bot","resources":{"hostingSite":"logoszr-bot","realtimeDatabaseInstance":"logoszr-bot-default-rtdb","storageBucket":"logoszr-bot.appspot.com","locationId":"us-central"},"state":"ACTIVE","etag":"1_d5edd85b-7f65-4ed7-be66-ea1454548744"}
+[debug] [2023-05-16T04:36:39.855Z] >>> [apiv2][query] GET https://firebasehosting.googleapis.com/v1beta1/projects/logoszr-bot/sites pageToken=&pageSize=10
+[debug] [2023-05-16T04:36:40.083Z] <<< [apiv2][status] GET https://firebasehosting.googleapis.com/v1beta1/projects/logoszr-bot/sites 200
+[debug] [2023-05-16T04:36:40.083Z] <<< [apiv2][body] GET https://firebasehosting.googleapis.com/v1beta1/projects/logoszr-bot/sites {"sites":[{"name":"projects/logoszr-bot/sites/logoszr-bot","defaultUrl":"https://logoszr-bot.web.app","type":"DEFAULT_SITE"}]}
+[debug] [2023-05-16T04:36:40.083Z] >>> [apiv2][query] GET https://firebasehosting.googleapis.com/v1beta1/projects/logoszr-bot/sites 
+[debug] [2023-05-16T04:36:40.241Z] <<< [apiv2][status] GET https://firebasehosting.googleapis.com/v1beta1/projects/logoszr-bot/sites 200
+[debug] [2023-05-16T04:36:40.241Z] <<< [apiv2][body] GET https://firebasehosting.googleapis.com/v1beta1/projects/logoszr-bot/sites {"sites":[{"name":"projects/logoszr-bot/sites/logoszr-bot","defaultUrl":"https://logoszr-bot.web.app","type":"DEFAULT_SITE"}]}
+[debug] [2023-05-16T04:36:40.241Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/logoszr-bot/webApps/-/config [none]
+[debug] [2023-05-16T04:36:40.502Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/logoszr-bot/webApps/-/config 200
+[debug] [2023-05-16T04:36:40.502Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/logoszr-bot/webApps/-/config {"projectId":"logoszr-bot","appId":"1:574475610187:web:65f70d5f07274fa51285ce","databaseURL":"https://logoszr-bot-default-rtdb.firebaseio.com","storageBucket":"logoszr-bot.appspot.com","locationId":"us-central","apiKey":"AIzaSyAdoZpORSXXGOcHB5NVYxyFIigj690iegI","authDomain":"logoszr-bot.firebaseapp.com","messagingSenderId":"574475610187","measurementId":"G-EL8GFLBYP6"}
+[debug] [2023-05-16T04:36:47.449Z] Error: Cannot find module 'next/dist/build'
+Require stack:
+- C:\Users\woods\AppData\Local\pnpm\global\5\.pnpm\firebase-tools@12.0.0_typescript@4.9.5\node_modules\firebase-tools\lib\frameworks\utils.js
+- C:\Users\woods\AppData\Local\pnpm\global\5\.pnpm\firebase-tools@12.0.0_typescript@4.9.5\node_modules\firebase-tools\lib\frameworks\index.js
+- C:\Users\woods\AppData\Local\pnpm\global\5\.pnpm\firebase-tools@12.0.0_typescript@4.9.5\node_modules\firebase-tools\lib\emulator\controller.js
+- C:\Users\woods\AppData\Local\pnpm\global\5\.pnpm\firebase-tools@12.0.0_typescript@4.9.5\node_modules\firebase-tools\lib\emulator\commandUtils.js
+- C:\Users\woods\AppData\Local\pnpm\global\5\.pnpm\firebase-tools@12.0.0_typescript@4.9.5\node_modules\firebase-tools\lib\commands\database-get.js
+- C:\Users\woods\AppData\Local\pnpm\global\5\.pnpm\firebase-tools@12.0.0_typescript@4.9.5\node_modules\firebase-tools\lib\commands\index.js
+- C:\Users\woods\AppData\Local\pnpm\global\5\.pnpm\firebase-tools@12.0.0_typescript@4.9.5\node_modules\firebase-tools\lib\index.js
+- C:\Users\woods\AppData\Local\pnpm\global\5\.pnpm\firebase-tools@12.0.0_typescript@4.9.5\node_modules\firebase-tools\lib\bin\firebase.js
+    at Module._resolveFilename (node:internal/modules/cjs/loader:1090:15)
+    at Function.resolve (node:internal/modules/helpers:125:19)
+    at relativeRequire (C:\Users\woods\AppData\Local\pnpm\global\5\.pnpm\firebase-tools@12.0.0_typescript@4.9.5\node_modules\firebase-tools\lib\frameworks\utils.js:133:30)
+    at build (C:\Users\woods\AppData\Local\pnpm\global\5\.pnpm\firebase-tools@12.0.0_typescript@4.9.5\node_modules\firebase-tools\lib\frameworks\next\index.js:50:64)
+    at memoizeBuild (C:\Users\woods\AppData\Local\pnpm\global\5\.pnpm\firebase-tools@12.0.0_typescript@4.9.5\node_modules\firebase-tools\lib\frameworks\index.js:70:19)
+    at prepareFrameworks (C:\Users\woods\AppData\Local\pnpm\global\5\.pnpm\firebase-tools@12.0.0_typescript@4.9.5\node_modules\firebase-tools\lib\frameworks\index.js:207:128)
+    at async deploy (C:\Users\woods\AppData\Local\pnpm\global\5\.pnpm\firebase-tools@12.0.0_typescript@4.9.5\node_modules\firebase-tools\lib\deploy\index.js:55:13)
+[error] 
+[error] Error: An unexpected error has occurred.

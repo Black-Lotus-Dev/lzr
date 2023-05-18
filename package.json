@@ -13,9 +13,9 @@
   "devDependencies": {
     "concurrently": "^8.0.1",
     "eslint": "^7.32.0",
-    "@black-lotus-dev/eslint": "1.0.1",
-    "prettier": "^2.5.1",
-    "turbo": "^1.9.4"
+    "eslint-config-custom": "workspace:*",
+    "prettier": "^2.8.8",
+    "turbo": "^1.9.7"
   },
   "packageManager": "pnpm@7.15.0",
   "vercel": {

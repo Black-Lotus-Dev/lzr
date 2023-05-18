@@ -1,7 +1,7 @@
 import LzrStore from "@/lzrStore/lzrStore";
 import { HubEventHandler } from "./actions";
 import ObsAction from "./action";
-import { waitForLzrRoom } from "@/utils/rtc";
+import { waitForLZRRoom } from "@/utils/rtc";
 import toast from "react-hot-toast";
 import { createLzrStore } from "@/utils/lzrStore";
 import OBSWebSocket from "obs-websocket-js";
@@ -19,7 +19,7 @@ import {
 } from "../twitch/client";
 import { ChatClient } from "@twurple/chat/lib";
 import twitchChatHandler from "../twitch/chat/commandHandler";
-import { LZRHost } from "@/../../../packages/ggpo";
+import { LZRHost } from "ggpo";
 
 interface ObsScenes {
   sceneIndex: number;
@@ -113,7 +113,7 @@ class LZRHub {
     });
 
     //wait for the obs hub to connect
-    waitForLzrRoom("hub", (room) => {
+    waitForLZRRoom("hub", (room) => {
       this.lzrRoom = room;
       const hubChannel = room.createChannel<string>("hub");
 

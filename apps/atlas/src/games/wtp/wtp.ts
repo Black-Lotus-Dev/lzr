@@ -1,10 +1,10 @@
 import _ from "lodash";
-import { LZRChannel } from "@black-lotus-dev/ggpo";
+import { LZRChannel } from "ggpo/types";
 
 import generationJson from "./genNameList.json";
 import pokemon from "./pkList.json";
 import types from "./typesList.json";
-import { waitForLzrRoom } from "@/utils/rtc";
+import { waitForLZRRoom } from "@/utils/rtc";
 
 type WTPProps =
   | {
@@ -30,7 +30,7 @@ interface WTPGameEnd {
 }
 
 export function startWtpGame() {
-  waitForLzrRoom("wtp-game", (host) => {
+  waitForLZRRoom("wtp-game", (host) => {
     const wtpChannel = host.createChannel<WTPProps>("wtp-game");
 
     wtpChannel.get((res) => {

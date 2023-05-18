@@ -20,7 +20,7 @@ import toast from "react-hot-toast";
 import GlobalLoader from "@/components/loader/loader";
 import { mainTwitchClient } from "@/lzrClients/twitch/client";
 import { useStoreWatch } from "@/utils/storeWatch";
-import { hostLzrRoom } from "@black-lotus-dev/ggpo";
+import { hostLZRRoom } from "ggpo/utils";
 import { runUserAuthSubscribers } from "@/utils/user";
 import { hub } from "@/lzrClients/hub/client";
 
@@ -99,7 +99,7 @@ export default function App() {
       hasAutoLoggedIn.current = true;
 
       // start a new lzr host room for the user
-      const room = hostLzrRoom("lzr", user.uid);
+      const room = hostLZRRoom("lzr", user.uid);
 
       runUserAuthSubscribers();
       navigate("/user");

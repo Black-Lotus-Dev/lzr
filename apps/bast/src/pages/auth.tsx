@@ -1,8 +1,8 @@
 import axios from "axios";
 import { GetServerSideProps } from "next";
 import { useEffect, useRef } from "react";
-import { apiUrl } from "../configs/auth";
-import { joinLzrRoom } from "@black-lotus-dev/ggpo";
+import { apiUrl } from "@configs/auth";
+import { joinLZRRoom } from "ggpo/utils";
 import toast from "react-hot-toast";
 import { useAuth } from "reactfire";
 import { signInWithCustomToken } from "firebase/auth";
@@ -31,7 +31,7 @@ export default function Auth(props: any) {
   }
 
   async function sendAuthData() {
-    const room = joinLzrRoom("auth", state);
+    const room = joinLZRRoom("auth", state);
     const authChannel = room.createChannel<string>("auth");
 
     authChannel.get(async (token) => {

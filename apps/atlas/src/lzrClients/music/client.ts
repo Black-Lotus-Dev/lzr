@@ -6,9 +6,10 @@ import _ from "lodash";
 import { getUserId } from "@utils/user";
 import { extractColors } from "extract-colors";
 import { FinalColor } from "extract-colors/lib/types/Color";
-import { LZRChannel, LZRHost } from "@black-lotus-dev/ggpo";
+import { LZRHost } from "ggpo";
+import { LZRChannel } from "ggpo/types";
 import toast from "react-hot-toast";
-import { waitForLzrRoom } from "@/utils/rtc";
+import { waitForLZRRoom } from "@/utils/rtc";
 
 export interface BaseSong {
   name: string;
@@ -205,7 +206,7 @@ class LZRMusicClient {
   };
 
   async startup() {
-    waitForLzrRoom("currentSong", this.createCurrentSongAction.bind(this));
+    waitForLZRRoom("currentSong", this.createCurrentSongAction.bind(this));
 
     this.state$
       .pipe(

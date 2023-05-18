@@ -1,5 +1,6 @@
-import { LZRGuestCb, waitForLzrGuest } from "@black-lotus-dev/ggpo";
+import { waitForLzrGuest } from "ggpo/utils";
 import { waitForUserAuth } from "./user";
+import { LZRGuestCb } from "ggpo/types";
 
-export const waitForLzrRoom = (name: string, cb: LZRGuestCb) =>
+export const waitForLZRRoom = (name: string, cb: LZRGuestCb) =>
   waitForUserAuth(name, (userId: string) => waitForLzrGuest(userId, cb));

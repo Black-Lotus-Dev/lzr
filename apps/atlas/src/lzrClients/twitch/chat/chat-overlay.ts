@@ -1,9 +1,9 @@
 import { getApiClient } from "@lzrClients/twitch/client";
-import { LZRChannel } from "@black-lotus-dev/ggpo";
+import { LZRChannel } from "ggpo/types";
 import { TwitchPrivateMessage } from "@twurple/chat/lib/commands/TwitchPrivateMessage";
 import { ApiClient, ChatEmote } from "@twurple/api/lib";
 import chroma from "chroma-js";
-import { waitForLzrRoom } from "@/utils/rtc";
+import { waitForLZRRoom } from "@/utils/rtc";
 
 export interface TwitchMsg {
   id: string;
@@ -36,7 +36,7 @@ class ChatOverlayHandler {
   private waitForRoom() {
     try {
       //try waiting for the room
-      waitForLzrRoom("chat-overlay", (host) => {
+      waitForLZRRoom("chat-overlay", (host) => {
         this.chatAction = host.createChannel<TwitchMsg>("chat");
       });
     } catch (e) {

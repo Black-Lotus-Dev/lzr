@@ -4,7 +4,7 @@ import { useDispatch } from "react-redux";
 import { BaseSong } from "@redux/slices/music";
 import CurrentSongOverlay from "@components/current-song";
 import { FinalColor } from "extract-colors/lib/types/Color";
-import { waitForLzrRoom } from "@utils/rtc";
+import { waitForLZRRoom } from "@utils/rtc";
 
 export type CurrentSong =
   | {
@@ -21,7 +21,7 @@ export default function NowPlaying() {
   const dispatch = useDispatch<ReduxDispatch>();
 
   useEffect(() => {
-    waitForLzrRoom("now-playing", (room) => {
+    waitForLZRRoom("now-playing", (room) => {
       const songChannel = room.createChannel<CurrentSong>("currentSong");
 
       songChannel.get((res) => {

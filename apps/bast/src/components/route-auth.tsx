@@ -2,10 +2,10 @@ import React, { ReactNode, useEffect, useRef, useState } from "react";
 import { useRouter } from "next/router";
 import { useAuth } from "reactfire";
 import { useDispatch, useStore } from "react-redux";
-import { ReduxDispatch, ReduxStore } from "../redux/store";
-import storeWatch from "../utils/store-watch";
-import { UserState } from "../redux/slices/user";
-import { joinLzrRoom } from "@black-lotus-dev/ggpo";
+import { ReduxDispatch, ReduxStore } from "@redux/store";
+import storeWatch from "@utils/store-watch";
+import { UserState } from "@redux/slices/user";
+import { joinLZRRoom } from "ggpo/utils";
 import { runUserAuthSubscribers } from "@utils/user";
 
 interface ProtectedRouteProps {
@@ -28,7 +28,7 @@ const RouteAuth = ({ children, isProtectedRoute }: ProtectedRouteProps) => {
     const unsubscribe = storeWatch<UserState>((newVal, oldVal) => {
       setIsAuthenticated(!!newVal.authUser);
       if (newVal.authUser !== null) {
-        joinLzrRoom(attemptedRoute, newVal.authUser?.uid!);
+        joinLZRRoom(attemptedRoute, newVal.authUser?.uid!);
         runUserAuthSubscribers();
       }
     }, "user");

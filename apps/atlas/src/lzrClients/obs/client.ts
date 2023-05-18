@@ -1,6 +1,6 @@
 import LzrStore from "@/lzrStore/lzrStore";
 import { createLzrStore } from "@/utils/lzrStore";
-import { waitForLzrRoom } from "@/utils/rtc";
+import { waitForLZRRoom } from "@/utils/rtc";
 import OBSWebSocket from "obs-websocket-js";
 import toast from "react-hot-toast";
 import { BehaviorSubject, pairwise, switchMap, of } from "rxjs";

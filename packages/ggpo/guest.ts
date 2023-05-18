@@ -1,20 +1,9 @@
 import { joinRoom, Room, selfId } from "trystero";
-import { LZRChannel } from "./channel";
+import { type ChannelEvent, type LZRChannel, type Peer } from "./types";
 
 const config = { appId: "https://logoszr-bot-default-rtdb.firebaseio.com" };
 
-interface Peer {
-  name: string;
-  id: string;
-  channels: string[];
-}
-
-type ChannelEvent = {
-  channel: string;
-  data: any;
-};
-
-class Guest {
+class LZRGuest {
   //details about the guest
   public name: string;
   public id: string;
@@ -33,7 +22,7 @@ class Guest {
   } = {};
 
   public queuedEvents: ChannelEvent[] = [];
-  public closeLzrRoom: () => void = () => {};
+  public closeLZRRoom: () => void = () => {};
   public notifySubscribers: (roomId: string) => void = () => {};
   public channelSub: LZRChannel<any> = {} as LZRChannel<any>;
 
@@ -97,12 +86,12 @@ class Guest {
   }
 
   public setCloseHostFunc = (cb: () => void) => {
-    this.closeLzrRoom = cb;
+    this.closeLZRRoom = cb;
   };
 
   public disconnect() {
     this.room.leave();
-    this.closeLzrRoom();
+    this.closeLZRRoom();
   }
 
   private handleSendAction = <T>(channel: string, data: T) => {
@@ -124,7 +113,8 @@ class Guest {
     if (!this.channels[channel]) {
       const [send, get, progress] = this.room.makeAction<T>(channel);
 
-      const lzrSendAction = (data: T) => this.handleSendAction(channel, data);
+      const lzrSendAction = (data: T) =>
+        this.handleSendAction<T>(channel, data);
       this.channels[channel] = {
         send: lzrSendAction,
         _send: send,
@@ -142,4 +132,4 @@ class Guest {
   }
 }
 
-export default Guest;
+export default LZRGuest;

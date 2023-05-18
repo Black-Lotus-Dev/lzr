@@ -1,8 +1,7 @@
 import chroma from "chroma-js";
 import { FinalColor } from "extract-colors/lib/types/Color";
 import { motion, useAnimationControls } from "framer-motion";
-import React from "react";
-import { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import toast from "react-hot-toast";
 import { useDispatch } from "react-redux";
 import {

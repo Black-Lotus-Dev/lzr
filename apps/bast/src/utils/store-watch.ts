@@ -1,4 +1,4 @@
-import { reduxStore } from "../redux/store";
+import { reduxStore } from "@redux/store";
 import watch from "redux-watch";
 
 type FieldPath = string | number | Array<string | number>;

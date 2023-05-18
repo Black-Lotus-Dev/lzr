@@ -3,7 +3,7 @@ const nextConfig = {
   experimental: {
     appDir: true,
   },
-  transpilePackages: ["simple-peer-light", "trystero"],
+  transpilePackages: ["simple-peer-light", "trystero", "ggpo"],
 };
 
 module.exports = nextConfig

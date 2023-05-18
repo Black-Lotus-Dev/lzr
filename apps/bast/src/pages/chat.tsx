@@ -1,4 +1,4 @@
-import { waitForLzrRoom } from "@utils/rtc";
+import { waitForLZRRoom } from "@utils/rtc";
 import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useState, useRef } from "react";
 import { ActionReceiver } from "trystero";
@@ -40,7 +40,7 @@ export default function ChatOverlay() {
   }
 
   useEffect(() => {
-    waitForLzrRoom("chat", (guest) => {
+    waitForLZRRoom("chat", (guest) => {
       const chatChannel = guest.createChannel<TwitchMsg>("chat");
 
       chatChannel.get((msg) => {

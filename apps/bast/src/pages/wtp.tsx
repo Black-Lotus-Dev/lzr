@@ -1,4 +1,4 @@
-import { waitForLzrRoom } from "@utils/rtc";
+import { waitForLZRRoom } from "@utils/rtc";
 import { motion } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
 
@@ -30,7 +30,7 @@ export default function WTP() {
   const wtpGameRef = useRef<WTPProps>();
 
   useEffect(() => {
-    waitForLzrRoom("wtp", (room) => {
+    waitForLZRRoom("wtp", (room) => {
       const wtpChannel = room.createChannel<WTPProps>("wtp-game");
       wtpChannel.get((res) => {
         wtpGameRef.current = res;

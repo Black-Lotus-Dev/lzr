@@ -1,8 +1,8 @@
 //this is the host peer that will be used to host the room
 
-import { createRandString, _ } from "@black-lotus-dev/shared/utils"
+import { createRandString } from "shared/utils";
 import { ActionSender, joinRoom, Room, selfId } from "trystero";
-import { LZRChannel } from "./channel";
+import { type LZRChannel, type Peer } from "./types";
 const config = { appId: "https://logoszr-bot-default-rtdb.firebaseio.com" };
 
 //the host the admin of the room and handles the 1 to many connections between guests
@@ -10,13 +10,7 @@ const config = { appId: "https://logoszr-bot-default-rtdb.firebaseio.com" };
 //to prevent unsecure and unneeded guest to guest connections
 //the host will handle the connections between guests and will only allow verified guests to connect to each other
 
-interface Peer {
-  name: string;
-  id: string;
-  channels: string[];
-}
-
-class Host {
+class LZRHost {
   //details about the host
   public name: string;
   public id: string;
@@ -31,7 +25,7 @@ class Host {
     [key: string]: LZRChannel<any>;
   } = {};
 
-  public closeLzrRoom: () => void = () => {};
+  public closeLZRRoom: () => void = () => {};
   public notifySubscribers: (roomId: string) => void = () => {};
   public kickPeer: ActionSender<0>;
 
@@ -42,10 +36,10 @@ class Host {
     this.roomName = name;
     this.roomId = roomId || createRandString();
     this.id = selfId;
-    
+
     this.room = joinRoom(config, this.roomId);
     this.startRoom();
-    
+
     this.kickPeer = this.room.makeAction<0>("kick-peer")[0];
   }
 
@@ -61,12 +55,12 @@ class Host {
   }
 
   public setCloseHostFunc = (cb: () => void) => {
-    this.closeLzrRoom = cb;
+    this.closeLZRRoom = cb;
   };
 
   public closeRoom() {
     this.room.leave();
-    this.closeLzrRoom();
+    this.closeLZRRoom();
   }
 
   private channelSubListener() {
@@ -144,4 +138,4 @@ class Host {
   }
 }
 
-export default Host;
+export default LZRHost;

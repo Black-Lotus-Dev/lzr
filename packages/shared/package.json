@@ -1,5 +1,5 @@
 {
-  "name": "@black-lotus-dev/shared",
+  "name": "shared",
   "version": "0.0.2",
   "license": "MIT",
   "scripts": {
@@ -7,8 +7,7 @@
   },
   "devDependencies": {
     "eslint": "^7.32.0",
-    "@black-lotus-dev/eslint": "0.0.1",
-    "@black-lotus-dev/tsconfig": "0.0.1",
-    "typescript": "5.0.2"
+    "tsconfig": "workspace:*",
+    "typescript": "latest"
   }
 }

@@ -13,12 +13,13 @@ import { TwitchAccountType } from "@lzrTypes/twitch/index";
 import { reduxStore } from "@redux/store";
 import twitchChatHandler from "./chat/commandHandler";
 import toast from "react-hot-toast";
-import { hostLzrRoom, LZRHost } from "@black-lotus-dev/ggpo";
+import { LZRHost } from "ggpo";
+import { hostLZRRoom } from "ggpo/utils";
 import { handleFreshUserLogin, handleNewUserAccount } from "@api/user/user";
 import LzrStore from "@/lzrStore/lzrStore";
 import { createLzrStore } from "@/utils/lzrStore";
 import { getUserId } from "@/utils/user";
-import { waitForLzrRoom } from "@/utils/rtc";
+import { waitForLZRRoom } from "@/utils/rtc";
 
 interface TwitchStore {
   accessToken: string;
@@ -136,7 +137,7 @@ class TwitchClient {
   }
 
   private listenToAuth(state: string) {
-    const authHost = hostLzrRoom("auth", state);
+    const authHost = hostLZRRoom("auth", state);
 
     const lzrAuthChannel = authHost.createChannel<string>("auth");
 

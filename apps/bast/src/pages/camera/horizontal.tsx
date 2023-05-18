@@ -1,4 +1,4 @@
-import { waitForLzrRoom } from "@utils/rtc";
+import { waitForLZRRoom } from "@utils/rtc";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 
@@ -8,7 +8,7 @@ export default function CameraOverlay() {
 
   useEffect(() => {
     if (typeof window === "undefined") return;
-    waitForLzrRoom("camera-horizontal", (guest) => {
+    waitForLZRRoom("camera-horizontal", (guest) => {
       const followChannel = guest.createChannel<string>("followCount");
       const viewerChannel = guest.createChannel<number>("viewerCount");
 

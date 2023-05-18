@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import { useStore } from "react-redux";
-import { MusicState } from "../redux/slices/music";
-import { ReduxRootState } from "../redux/store";
-import storeWatch from "../utils/store-watch";
+import { MusicState } from "@redux/slices/music";
+import { ReduxRootState } from "@redux/store";
+import storeWatch from "@utils/store-watch";
 import toast from "react-hot-toast";
 import { motion, useAnimationControls } from "framer-motion";
 

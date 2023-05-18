@@ -13,7 +13,7 @@ import axios from "axios";
 import { BehaviorSubject, of, pairwise, switchMap } from "rxjs";
 import { reduxStore } from "@redux/store";
 import { BaseSong, LZRSongItem } from "./client";
-import { hostLzrRoom } from "@black-lotus-dev/ggpo";
+import { hostLZRRoom } from "ggpo/utils";
 import { fetchApi } from "@utils/fetchApi";
 import { GetRefreshableUserTokensResponse } from "spotify-web-api-ts/types/types/SpotifyAuthorization";
 import { createLzrStore } from "@/utils/lzrStore";
@@ -215,7 +215,7 @@ class LZRSpotifyClient {
   }
 
   listenToAuth(state) {
-    const authHost = hostLzrRoom("auth", state);
+    const authHost = hostLZRRoom("auth", state);
     const lzrAuthChannel = authHost.createChannel<string>("auth");
 
     lzrAuthChannel.get(async (code) => {

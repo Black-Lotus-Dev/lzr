@@ -1,4 +1,4 @@
-import { waitForLzrRoom } from "@utils/rtc";
+import { waitForLZRRoom } from "@utils/rtc";
 import { useEffect, useState } from "react";
 
 export default function CameraOverlay() {
@@ -7,7 +7,7 @@ export default function CameraOverlay() {
 
   useEffect(() => {
     if (typeof window === "undefined") return;
-    waitForLzrRoom("camera-vertical", (guest) => {
+    waitForLZRRoom("camera-vertical", (guest) => {
       const followChannel = guest.createChannel<number>("followCount");
       const viewerChannel = guest.createChannel<number>("viewerCount");
 
