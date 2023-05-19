@@ -200,11 +200,14 @@ class LZRHub {
   private startTwitchObsActions() {}
 
   startChatListener() {
-    this.chat = getChatClient();
-    this.chat.quit();
-    this.chat.connect().then(() => {
-      this.chat.onMessage(twitchChatHandler);
-    });
+    //pause for 3 seconds to allow the obs bot to connect
+    setTimeout(() => {
+      this.chat = getChatClient();
+      this.chat.quit();
+      this.chat.connect().then(() => {
+        this.chat.onMessage(twitchChatHandler);
+      });
+    }, 1000);
   }
 
   async startViewerCountListener() {
