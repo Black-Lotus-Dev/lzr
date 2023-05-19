@@ -1,6 +1,6 @@
 import React, { ReactNode, useEffect, useRef, useState } from "react";
 import { useRouter } from "next/router";
-import { useAuth } from "reactfire";
+import { useAuth, useFirebaseApp } from "reactfire";
 import { useDispatch, useStore } from "react-redux";
 import { ReduxDispatch, ReduxStore } from "@redux/store";
 import storeWatch from "@utils/store-watch";
@@ -14,6 +14,7 @@ interface ProtectedRouteProps {
 }
 
 const RouteAuth = ({ children, isProtectedRoute }: ProtectedRouteProps) => {
+  const app = useFirebaseApp();
   const store = useStore<ReduxStore>();
   const dispatch = useDispatch<ReduxDispatch>();
   const auth = useAuth();
@@ -28,7 +29,7 @@ const RouteAuth = ({ children, isProtectedRoute }: ProtectedRouteProps) => {
     const unsubscribe = storeWatch<UserState>((newVal, oldVal) => {
       setIsAuthenticated(!!newVal.authUser);
       if (newVal.authUser !== null) {
-        joinLZRRoom(attemptedRoute, newVal.authUser?.uid!);
+        joinLZRRoom(attemptedRoute, app, newVal.authUser?.uid!);
         runUserAuthSubscribers();
       }
     }, "user");

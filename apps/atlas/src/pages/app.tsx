@@ -99,7 +99,7 @@ export default function App() {
       hasAutoLoggedIn.current = true;
 
       // start a new lzr host room for the user
-      const room = hostLZRRoom("lzr", user.uid);
+      hostLZRRoom("lzr", app, user.uid);
 
       runUserAuthSubscribers();
       navigate("/user");

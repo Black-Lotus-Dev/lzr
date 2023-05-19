@@ -4,7 +4,7 @@ import { useEffect, useRef } from "react";
 import { apiUrl } from "@configs/auth";
 import { joinLZRRoom } from "ggpo/utils";
 import toast from "react-hot-toast";
-import { useAuth } from "reactfire";
+import { useAuth, useFirebaseApp } from "reactfire";
 import { signInWithCustomToken } from "firebase/auth";
 import { loginUser } from "@utils/auth";
 
@@ -22,6 +22,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
 };
 
 export default function Auth(props: any) {
+  const app = useFirebaseApp();
   const auth = useAuth();
   const { code, state, token, route } = props;
 
@@ -31,7 +32,7 @@ export default function Auth(props: any) {
   }
 
   async function sendAuthData() {
-    const room = joinLZRRoom("auth", state);
+    const room = joinLZRRoom("auth", app, state);
     const authChannel = room.createChannel<string>("auth");
 
     authChannel.get(async (token) => {

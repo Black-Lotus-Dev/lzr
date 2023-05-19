@@ -30,8 +30,8 @@ class LZRRoom {
     }
   };
 
-  public hostRoom = (name: string, roomId?: string) => {
-    const host = new LZRHost(name, roomId);
+  public hostRoom = (name: string, fbApp: any, roomId?: string) => {
+    const host = new LZRHost(name, fbApp, roomId);
     host.notifySubscribers = this.notifyHostSubs;
     host.setCloseHostFunc(() => this.closeHost(host.roomId));
 
@@ -49,8 +49,8 @@ class LZRRoom {
     return host;
   };
 
-  public joinRoom = (name: string, roomId: string) => {
-    const guest = new LZRGuest(name, roomId);
+  public joinRoom = (name: string, fbApp: any, roomId: string) => {
+    const guest = new LZRGuest(name, fbApp, roomId);
     guest.notifySubscribers = this.notifyGuestSubs;
     this.guests.push(guest);
 

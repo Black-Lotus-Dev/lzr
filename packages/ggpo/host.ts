@@ -1,7 +1,9 @@
 //this is the host peer that will be used to host the room
 
 import { createRandString } from "shared/utils";
-import { ActionSender, joinRoom, Room, selfId } from "trystero";
+//@ts-ignore
+import { joinRoom } from "trystero/firebase";
+import { ActionSender, Room, selfId } from "trystero";
 import { type LZRChannel, type Peer } from "./types";
 const config = { appId: "https://logoszr-bot-default-rtdb.firebaseio.com" };
 
@@ -31,13 +33,13 @@ class LZRHost {
 
   public kick = (guestId: string) => this.kickPeer(0, guestId);
 
-  constructor(name: string, roomId?: string) {
+  constructor(name: string, fbApp: any, roomId?: string) {
     this.name = name;
     this.roomName = name;
     this.roomId = roomId || createRandString();
     this.id = selfId;
 
-    this.room = joinRoom(config, this.roomId);
+    this.room = joinRoom({ ...config, firebaseApp: fbApp }, this.roomId);
     this.startRoom();
 
     this.kickPeer = this.room.makeAction<0>("kick-peer")[0];

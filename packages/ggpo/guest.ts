@@ -1,4 +1,6 @@
-import { joinRoom, Room, selfId } from "trystero";
+//@ts-ignore
+import { joinRoom } from "trystero/firebase";
+import { Room, selfId } from "trystero";
 import { type ChannelEvent, type LZRChannel, type Peer } from "./types";
 
 const config = { appId: "https://logoszr-bot-default-rtdb.firebaseio.com" };
@@ -26,13 +28,13 @@ class LZRGuest {
   public notifySubscribers: (roomId: string) => void = () => {};
   public channelSub: LZRChannel<any> = {} as LZRChannel<any>;
 
-  constructor(name: string, roomId: string) {
+  constructor(name: string, fbApp: any, roomId: string) {
     this.name = name;
     this.roomName = name;
     this.roomId = roomId;
     this.id = selfId;
 
-    this.room = joinRoom(config, this.roomId);
+    this.room = joinRoom({ ...config, firebaseApp: fbApp }, this.roomId);
     this.connectToHost();
   }
 
