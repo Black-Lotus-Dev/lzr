@@ -20,6 +20,7 @@ import LzrStore from "@/lzrStore/lzrStore";
 import { createLzrStore } from "@/utils/lzrStore";
 import { getUserId } from "@/utils/user";
 import { waitForLZRRoom } from "@/utils/rtc";
+import { fbApp } from "@/configs/firebase";
 
 interface TwitchStore {
   accessToken: string;
@@ -137,7 +138,7 @@ class TwitchClient {
   }
 
   private listenToAuth(state: string) {
-    const authHost = hostLZRRoom("auth", state);
+    const authHost = hostLZRRoom("auth", fbApp, state);
 
     const lzrAuthChannel = authHost.createChannel<string>("auth");
 

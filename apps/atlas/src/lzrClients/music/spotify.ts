@@ -17,6 +17,7 @@ import { hostLZRRoom } from "ggpo/utils";
 import { fetchApi } from "@utils/fetchApi";
 import { GetRefreshableUserTokensResponse } from "spotify-web-api-ts/types/types/SpotifyAuthorization";
 import { createLzrStore } from "@/utils/lzrStore";
+import { fbApp } from "@/configs/firebase";
 
 type DevicesResult = {
   devices: Device[];
@@ -215,7 +216,7 @@ class LZRSpotifyClient {
   }
 
   listenToAuth(state) {
-    const authHost = hostLZRRoom("auth", state);
+    const authHost = hostLZRRoom("auth", fbApp, state);
     const lzrAuthChannel = authHost.createChannel<string>("auth");
 
     lzrAuthChannel.get(async (code) => {

@@ -25,6 +25,9 @@ export class OBSClient {
   //state$ uses rxjs to subscribe to state changes
   public state$ = new BehaviorSubject<typeof this.state>(this.state);
 
+  //this var handles the polling for the connection state
+  public connectionPoll: NodeJS.Timer;
+
   async startup() {
     this.store = await createLzrStore("obs");
     const { isConnected } = await this.state;
@@ -63,7 +66,9 @@ export class OBSClient {
     if (!!this.store.state.wsPassword) {
       //connect to obs if the password is already set
       const { wsPassword, wsIp, wsPort } = this.store.state;
-      this.connect(wsIp, wsPort, wsPassword);
+      this.connect(wsIp, wsPort, wsPassword).catch((e) => {
+        this.startReconnectPoll();
+      });
     }
   }
 
@@ -73,20 +78,17 @@ export class OBSClient {
     });
   }
 
-  public restartConnection() {
-    const { wsPassword, wsIp, wsPort } = this.store.state;
-    return this.connect(wsIp, wsPort, wsPassword);
+  public startReconnectPoll() {
+    this.connectionPoll = setInterval(() => {
+      const { wsPassword, wsIp, wsPort } = this.store.state;
+      this.connect(wsIp, wsPort, wsPassword).then((e) => {
+        clearInterval(this.connectionPoll);
+      });
+    }, 5000);
   }
 
-  async connect(wsIp: string, wsPort: string, wsPass: string) {
-    try {
-      await this.obsWs.connect(`ws://${wsIp}:${wsPort}`, wsPass);
-      return true;
-    } catch (e) {
-      if (e.code !== 1006) return false;
-      return -1;
-    }
-  }
+  connect = async (wsIp: string, wsPort: string, wsPass: string) =>
+    this.obsWs.connect(`ws://${wsIp}:${wsPort}`, wsPass);
 
   public getObsWsSettings() {
     const { wsIp, wsPort, wsPassword } = this.store.state;

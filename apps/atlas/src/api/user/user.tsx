@@ -1,4 +1,4 @@
-import { auth } from "@configs/firebase";
+import { fbAuth } from "@configs/firebase";
 import { fetchApi } from "@utils/fetchApi";
 import { signInWithCustomToken } from "firebase/auth";
 import { mainTwitchClient } from "@lzrClients/twitch/client";
@@ -43,15 +43,15 @@ export async function handleNewUserAccount() {
 }
 
 export async function handleFreshUserLogin(userToken?: string) {
-  const currentUser = auth.currentUser;
+  const currentUser = fbAuth.currentUser;
 
   //check if user exists
-  if (currentUser) auth.signOut();
+  if (currentUser) fbAuth.signOut();
 
   //if no token is provided, get one
   if (!userToken) userToken = await getUserToken();
 
-  signInWithCustomToken(auth, userToken)
+  signInWithCustomToken(fbAuth, userToken)
     .then((userCredential) => {
       const user = userCredential.user;
       toast.success(`Welcome back ${user.displayName}!`, { icon: "👋" });

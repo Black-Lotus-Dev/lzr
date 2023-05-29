@@ -13,8 +13,8 @@ const firebaseConfig = {
   databaseURL: import.meta.env.VITE_FIREBASE_DATABASE_URL,
 };
 
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-const auth = getAuth(app);
+const fbApp = initializeApp(firebaseConfig);
+const fbDb = getFirestore(fbApp);
+const fbAuth = getAuth(fbApp);
 
-export { app, auth, db, firebaseConfig };
+export { fbApp, fbAuth, fbDb, firebaseConfig };

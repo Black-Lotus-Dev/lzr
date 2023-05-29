@@ -132,15 +132,7 @@ class LZRHub {
 
           this.obsClient = getObsClient();
 
-          //if obs is not connected then restart the obs bot
-          const didConnect = await this.obsClient.restartConnection();
-          if (didConnect === -1 || didConnect === false) {
-            //if the connection failed then set the state to false
-            return;
-          }
-
           this.state$.next({ ...this.state, obsIsConnected: true });
-          toast(didConnect ? "obs-connected" : "obs-connection-failed");
         }
         if (event === "obs-get-settings") {
           // const { wsIp, wsPort, wsPassword } = this.store.state;
