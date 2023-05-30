@@ -16,25 +16,27 @@ import { BaseSong, MusicState } from "../redux/slices/music";
 import { ReduxDispatch } from "../redux/store";
 import storeWatch from "../utils/store-watch";
 import SongProgress from "./song-progress";
+import { waitForLZRRoom } from "@utils/rtc";
+import { CurrentSong } from "@pages/now-playing";
 
 const songAnims = {
-	start: {
-		img: imgEnterAnim,
-		text: textEnterAnim,
-	},
-	end: {
-		img: imgExitAnim,
-		text: textExitAnim,
-	},
-	song: {
-		img: imgChangeAnim,
-		text: textChangeAnim,
-	},
+  start: {
+    img: imgEnterAnim,
+    text: textEnterAnim,
+  },
+  end: {
+    img: imgExitAnim,
+    text: textExitAnim,
+  },
+  song: {
+    img: imgChangeAnim,
+    text: textChangeAnim,
+  },
 };
 
 const rainbow = chroma
-	.scale(["red", "orange", "yellow", "green", "blue", "indigo", "violet"])
-	.colors(7);
+  .scale(["red", "orange", "yellow", "green", "blue", "indigo", "violet"])
+  .colors(7);
 
 type SongEvent = "start" | "end" | "song" | "progress" | "none";
 
@@ -56,6 +58,34 @@ function CurrentSongOverlay() {
 
   const isPlayingRef = useRef<boolean>();
   const colorPalette = useRef<FinalColor[] | undefined>(userColorPalette);
+
+  useEffect(() => {
+    waitForLZRRoom("now-playing", (room) => {
+      const nowPlayingChannel = room.createChannel<string>("nowPlayingHub");
+      const songChannel = room.createChannel<CurrentSong>("currentSong");
+
+      //subscribe to the now playing channel
+      nowPlayingChannel.get((res) => {
+        if (res === "") {
+        }
+      });
+
+      songChannel.get((res) => {
+        if (res.isPlaying) {
+          const { song, isPlaying, albumArtColorPalette } = res;
+          dispatch.music.updateCurrentSong({
+            song,
+            isPlaying,
+            albumArtColorPalette,
+          });
+        } else {
+          dispatch.music.updateCurrentSong({
+            isPlaying: false,
+          });
+        }
+      });
+    });
+  }, []);
 
   useEffect(() => {
     runAnim();
@@ -116,6 +146,11 @@ function CurrentSongOverlay() {
     const { img, text } = songAnims[eventState];
     imgAnimControls.start(img);
     textAnimControls.start(text);
+
+    //close the text animation after 2 seconds
+    setTimeout(() => {
+      textAnimControls.start("end");
+    }, 2000);
   }
 
   if (isPlayingRef.current === null)
