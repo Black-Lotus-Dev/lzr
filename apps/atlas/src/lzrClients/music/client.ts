@@ -145,7 +145,6 @@ class LZRMusicClient {
       albumArtColorPalette,
       updatedAt: new Date(),
     });
-    toast("updated song");
   };
 
   playSong = async (song: LZRSongItem): Promise<void> => {

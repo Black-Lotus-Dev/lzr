@@ -196,10 +196,15 @@ class LZRHub {
     setTimeout(() => {
       this.chat = getChatClient();
       this.chat.quit();
-      this.chat.connect().then(() => {
-        this.chat.onMessage(twitchChatHandler);
-      });
-    }, 1000);
+      this.chat
+        .connect()
+        .then(() => {
+          this.chat.onMessage(twitchChatHandler);
+        })
+        .catch((e) => {
+          console.error(e);
+        });
+    }, 2000);
   }
 
   async startViewerCountListener() {

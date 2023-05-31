@@ -25,14 +25,18 @@ class LzrStore<T> {
   }
 
   public save() {
-    console.log("Saving", this.filename);
-    console.log(this.state);
-    Array.from(Object.keys(this.state)).map((key) => {
-      this.store.set(key, this.state[key]);
-    });
+    try {
+      console.log("Saving", this.filename);
+      console.log(this.state);
+      Array.from(Object.keys(this.state)).map((key) => {
+        this.store.set(key, this.state[key]);
+      });
 
-    toast.success(this.filename + " - Saved");
-    this.store.save();
+      toast.success(this.filename + " - Saved");
+      this.store.save();
+    } catch {
+      toast.error("Error saving " + this.filename);
+    }
   }
 
   public destroy(): void {

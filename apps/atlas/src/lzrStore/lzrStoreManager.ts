@@ -11,7 +11,7 @@ class LzrStoreManager {
   public autoSaveEnabled: boolean = false;
 
   constructor() {
-    // this.autoSaveEnabled && this.startAutoSaveTimer();
+    this.autoSaveEnabled && this.startAutoSaveTimer();
   }
 
   public registerStore<T>(store: LzrStore<T>): void {

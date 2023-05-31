@@ -71,9 +71,13 @@ function listCommands({ channel, user }: CommandHandlerProps) {
   const chatClient = getChatClient("bot");
   let responseText = "";
   commands.forEach((command) => {
-    responseText += `${command.commands.join(", ")}: ${command.examples.join(
-      ", "
-    )}`;
+    responseText += `${command.commands.join("/")}`;
+    const hasExamples = command.examples && command.examples.length > 0;
+    if (hasExamples) {
+      responseText += `: ${command.examples.join(", ")}`;
+    }
+
+    responseText += "; ";
   });
 
   chatClient.say(

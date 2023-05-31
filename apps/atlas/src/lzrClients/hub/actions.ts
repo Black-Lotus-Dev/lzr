@@ -29,8 +29,6 @@ export async function SwitchToHorizontalCamera() {
     ToggleCameraHDisplay(true);
     ToggleCameraVDisplay(false);
   }
-
-  toast("Switching to Horizontal Camera");
 }
 
 export async function SwitchToVerticalCamera() {

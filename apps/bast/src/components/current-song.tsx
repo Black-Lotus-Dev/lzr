@@ -61,11 +61,11 @@ function CurrentSongOverlay() {
 
   useEffect(() => {
     waitForLZRRoom("now-playing", (room) => {
-      const nowPlayingChannel = room.createChannel<string>("nowPlayingHub");
+      const musicChannel = room.createChannel<string>("🎵");
       const songChannel = room.createChannel<CurrentSong>("currentSong");
 
       //subscribe to the now playing channel
-      nowPlayingChannel.get((res) => {
+      musicChannel.get((res) => {
         if (res === "") {
         }
       });
