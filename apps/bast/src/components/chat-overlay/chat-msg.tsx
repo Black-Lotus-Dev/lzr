@@ -2,7 +2,7 @@ import { TwitchMsg } from "@pages/chat";
 import chroma from "chroma-js";
 import { motion } from "framer-motion";
 
-export function ChatMsg({ message, msg, color, userImg }: TwitchMsg) {
+export function ChatMsg({ message, msg, color, userImg, userName }: TwitchMsg) {
   //our emotes will be between |%| and |%%| so we need to split the message by those
   const emoteRegex = /\|%\|(.+?)\|%%\|/g;
 
@@ -64,8 +64,13 @@ export function ChatMsg({ message, msg, color, userImg }: TwitchMsg) {
       </motion.div>
       <motion.div
         layout
-        className="min-w-0 flex flex-1 shadow-2xl bg-white bg-opacity-5 rounded-md p-2 text-white"
+        className="min-w-0 flex flex-1 flex-col shadow-2xl bg-white bg-opacity-5 rounded-md p-2 text-white"
       >
+        {/* display username */}
+        <motion.div layout className="font-bold w-full mb-2">
+          {userName}
+        </motion.div>
+
         <motion.div className="w-full h-full break-words">
           {/* loop through the split message and then check if theres any emotes */}
           {splitMsg.map((msg, i) => {

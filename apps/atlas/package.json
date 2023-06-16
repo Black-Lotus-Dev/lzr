@@ -4,11 +4,12 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "local": "vite --mode dev",
-    "dev": "vite",
     "build": "tsc && vite build",
-    "preview": "vite preview",
+    "dev": "vite",
     "tauri:dev": "tauri dev",
+    "local": "vite --mode dev",
+    "prebuild": "node ./scripts/generate-csp.mjs",
+    "preview": "vite preview",
     "package": "tauri build"
   },
   "dependencies": {
@@ -43,6 +44,7 @@
     "spotify-types": "^1.0.7",
     "spotify-web-api-ts": "^1.4.5",
     "tauri-plugin-store-api": "github:tauri-apps/tauri-plugin-store",
+    "tauri-plugin-websocket-api": "github:tauri-apps/tauri-plugin-websocket#v1",
     "trystero": "^0.11.8"
   },
   "devDependencies": {

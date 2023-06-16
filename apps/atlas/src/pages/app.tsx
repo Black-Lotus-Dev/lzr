@@ -75,6 +75,7 @@ export default function App() {
   }
 
   useEffect(() => {
+    toast("app loaded");
     if (!isFirstRun.current) return;
     isFirstRun.current = false;
 

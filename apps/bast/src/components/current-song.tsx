@@ -3,17 +3,17 @@ import { FinalColor } from "extract-colors/lib/types/Color";
 import { motion, useAnimationControls } from "framer-motion";
 import React, { useEffect, useRef, useState } from "react";
 import toast from "react-hot-toast";
-import { useDispatch } from "react-redux";
+import { useDispatch, useStore } from "react-redux";
 import {
-	imgEnterAnim,
-	textEnterAnim,
-	imgExitAnim,
-	textExitAnim,
-	imgChangeAnim,
-	textChangeAnim,
+  imgEnterAnim,
+  textEnterAnim,
+  imgExitAnim,
+  textExitAnim,
+  imgChangeAnim,
+  textChangeAnim,
 } from "../constants/animations/current-song";
 import { BaseSong, MusicState } from "../redux/slices/music";
-import { ReduxDispatch } from "../redux/store";
+import { ReduxDispatch, ReduxRootState } from "../redux/store";
 import storeWatch from "../utils/store-watch";
 import SongProgress from "./song-progress";
 import { waitForLZRRoom } from "@utils/rtc";
@@ -41,6 +41,8 @@ const rainbow = chroma
 type SongEvent = "start" | "end" | "song" | "progress" | "none";
 
 function CurrentSongOverlay() {
+  const store = useStore<ReduxRootState>();
+
   //states
   const [song, setSong] = useState<BaseSong>();
   const [eventState, setEventState] = useState<SongEvent>("none");
@@ -59,7 +61,13 @@ function CurrentSongOverlay() {
   const isPlayingRef = useRef<boolean>();
   const colorPalette = useRef<FinalColor[] | undefined>(userColorPalette);
 
+  const isPayingRef = useRef<boolean>(store.getState().music.isPlaying);
+
   useEffect(() => {
+    const unsubscribe = storeWatch<MusicState>((newVal, oldVal) => {
+      parseNewSong(oldVal, newVal);
+    }, "music");
+
     waitForLZRRoom("now-playing", (room) => {
       const musicChannel = room.createChannel<string>("🎵");
       const songChannel = room.createChannel<CurrentSong>("currentSong");
@@ -85,38 +93,29 @@ function CurrentSongOverlay() {
         }
       });
     });
-  }, []);
-
-  useEffect(() => {
-    runAnim();
-  }, [song]);
-
-  useEffect(() => {
-    const unsubscribe = storeWatch<MusicState>((newVal, oldVal) => {
-      parseNewSong(oldVal, newVal);
-    }, "music");
 
     return () => {
       unsubscribe();
     };
   }, []);
 
+  useEffect(() => {
+    runAnim();
+  }, [song]);
+
   function startPlaying(newSong?: BaseSong) {
     isPlayingRef.current = true;
     setEventState("start");
-    setSong(newSong);
   }
 
   function endPlaying(newSong?: BaseSong) {
     isPlayingRef.current = false;
     setEventState("end");
-    setSong(newSong);
   }
 
   function changeSong(newSong?: BaseSong) {
     toast("Song Updated", { icon: "🎵" });
     setEventState("song");
-    setSong(newSong);
   }
 
   function parseNewSong(oldVal: MusicState, newVal: MusicState) {
@@ -137,8 +136,10 @@ function CurrentSongOverlay() {
     else if (!playBackStateChanged && !newIsPlaying) return;
     else if (!playBackStateChanged && oldSong?.name !== newSong?.name)
       changeSong(newSong);
-    else if (!playBackStateChanged && oldSong?.name !== newSong?.name)
+    else if (!playBackStateChanged && oldSong?.progress !== newSong?.progress)
       setEventState("progress");
+
+    setSong(newSong);
   }
 
   function runAnim() {
@@ -149,7 +150,8 @@ function CurrentSongOverlay() {
 
     //close the text animation after 2 seconds
     setTimeout(() => {
-      textAnimControls.start("end");
+      const { text } = songAnims["end"];
+      textAnimControls.start(text);
     }, 2000);
   }
 
@@ -192,14 +194,12 @@ function CurrentSongOverlay() {
       ? song.artists.join(", ").slice(0, 20) + "..."
       : song?.artists.join(", ");
 
+  const progPercent = song?.progress / song?.duration;
   return (
     <>
-      <motion.img
-        className="w-60 h-60 rounded-xl overflow-hidden shadow-xl relative z-10"
-        src={albumImg}
-        alt="albumImg"
-        initial={{ rotate: -180, scale: 0 }}
-        animate={imgAnimControls}
+      <motion.div
+        layout
+        className="w-60 h-60 overflow-hidden rounded-xl shadow-xl relative z-10"
         style={{
           boxShadow: `3px 3px 5px 2px ${chroma(
             luma < 0.5 ? primaryColor.hex : "black"
@@ -207,7 +207,16 @@ function CurrentSongOverlay() {
             .alpha(1)
             .hex()}`,
         }}
-      />
+        initial={{ rotate: -180, scale: 0 }}
+        animate={imgAnimControls}
+      >
+        <motion.img
+          layout
+          className="w-full h-full absolute z-1 rounded-xl"
+          src={albumImg}
+          alt="albumImg"
+        />
+      </motion.div>
 
       <motion.div
         initial={{ scaleX: 0, opacity: 0 }}

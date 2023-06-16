@@ -59,19 +59,16 @@
       }
     },
     "security": {
-      "csp": null
+      "csp": "default-src * 'unsafe-inline' 'unsafe-eval'; style-src * 'unsafe-inline'; img-src * data:; script-src * 'unsafe-inline' 'unsafe-eval'; connect-src * ws:;"
     },
     "updater": {
       "active": false
     },
     "windows": [
       {
-        "fullscreen": false,
-        "height": 600,
         "label": "main",
         "resizable": true,
-        "title": "Atlas",
-        "width": 800
+        "title": "Atlas"
       }
     ]
   }

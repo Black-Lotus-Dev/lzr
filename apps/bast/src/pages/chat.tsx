@@ -17,7 +17,6 @@ export interface TwitchMsg {
 }
 
 export default function ChatOverlay() {
-  const getNewMsg = useRef<ActionReceiver<TwitchMsg>>();
   const [messages, setMessages] = useState<TwitchMsg[]>([]);
 
   useEffect(() => {

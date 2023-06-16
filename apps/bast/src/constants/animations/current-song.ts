@@ -29,6 +29,7 @@ const imgChangeAnim = {
 };
 
 const textEnterAnim = {
+  transformOrigin: "left",
   scaleX: 1,
   opacity: 1,
   transition: {
@@ -39,6 +40,7 @@ const textEnterAnim = {
 };
 
 const textExitAnim = {
+  transformOrigin: "left",
   scaleX: [1, 0],
   opacity: [1, 0],
   transition: {
@@ -49,8 +51,11 @@ const textExitAnim = {
 };
 
 const textChangeAnim = {
-  opacity: [1, 0.5, 1],
+  transformOrigin: "left",
+  scaleX: 1,
+  opacity: 1,
   transition: {
+    ease: "easeInOut",
     stiffness: 260,
     damping: 20,
   },

@@ -153,14 +153,12 @@ class LZRMusicClient {
     if (itemType === "spotify") {
       duration = song.duration;
       await this.spotify.addToQueueThenPlay(song.uri);
+      toast(`${song.name} Queued by ${song.artists[0]}`);
     }
-
-    this.playNextSongListener = setTimeout(() => {
-      this.playNextSongInQueue();
-    }, duration - this.songQueueBuffer);
   };
 
   playNextSongInQueue = async () => {
+    toast("Playing next song in queue");
     if (this.state.queue.length > 0) {
       const nextSong = this.state.queue[0];
       await this.playSong(nextSong);
@@ -176,6 +174,8 @@ class LZRMusicClient {
   //create uuidv4
 
   addSongToQueue = async (song: LZRSongItem, user: string) => {
+    toast(`${song.name} Queued by ${user}`);
+
     const newQueue = [
       ...this.state.queue,
       {
@@ -222,6 +222,7 @@ class LZRMusicClient {
           if (oldState.queue.length !== newState.queue.length) {
             if (this.state.autoPlay) {
               if (oldState.queue.length < newState.queue.length) {
+                toast(`new song added to queue`);
                 //song was added to the queue
                 if (!oldState.currentSong || oldState.currentSong == null)
                   this.playNextSongInQueue();

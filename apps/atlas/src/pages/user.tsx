@@ -11,10 +11,12 @@ import TwitchModal from "../components/twitch/twitchModal";
 import MusicModal from "../components/music/musicModal";
 import { useDispatch } from "react-redux";
 import { ReduxDispatch } from "@/redux/store";
+import toast from "react-hot-toast";
+import { t } from "@tauri-apps/api/event-30ea0228";
 
 const clientNames = ["twitch", "music", "obs", "streamdeck"] as const;
 interface UserClients {
-  name: typeof clientNames[number];
+  name: (typeof clientNames)[number];
   logo: string | JSX.Element;
 }
 
@@ -38,6 +40,7 @@ const clients: UserClients[] = [
 ];
 
 export default function UserHome() {
+  toast("user home page");
   const dispatch = useDispatch<ReduxDispatch>();
   const [modalIsOpen, setModalIsOpen] = useState(false);
 
@@ -60,6 +63,35 @@ export default function UserHome() {
     setModalIsOpen(false);
   }
 
+  //function to connect to local websocket port 6969
+  function connectToWebsocket() {
+    //create websocket instance
+    const ws = new WebSocket("ws://127.0.0.1:6969");
+
+    //on open
+    ws.onopen = () => {
+      toast("connected to websocket");
+      console.log("connected to websocket");
+    };
+
+    //on message
+    ws.onmessage = (e) => {
+      console.log(e.data);
+    };
+
+    //on close
+    ws.onclose = () => {
+      toast("disconnected from websocket");
+      console.log("disconnected from websocket");
+    };
+
+    //on error
+    ws.onerror = (e) => {
+      toast.error("error connecting to websocket");
+      console.log(e);
+    };
+  }
+
   const ShowClientModal = () => {
     switch (clientRef.current) {
       case "twitch":
@@ -69,6 +101,7 @@ export default function UserHome() {
       case "obs":
         return <ObsModal />;
       case "streamdeck":
+        connectToWebsocket();
         return <div>streamdeck</div>;
       default:
         return <div>default</div>;
