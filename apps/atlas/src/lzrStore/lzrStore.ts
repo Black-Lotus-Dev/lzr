@@ -20,7 +20,7 @@ class LzrStore<T> {
     this.state = initData;
   }
 
-  public update(data: Partial<T>): void {
+  public async update(data: Partial<T>): Promise<void> {
     this.$state.next({ ...this.state, ...data });
   }
 

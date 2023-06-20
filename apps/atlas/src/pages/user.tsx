@@ -4,19 +4,27 @@ import ObsLogo from "../assets/images/obs-logo.png";
 import SpotifyLogo from "../assets/images/Spotify-logo.png";
 import TwitchLogo from "../assets/images/twitch-logo.png";
 import StreamDeckLogo from "../assets/images/stream-deck-logo.png";
+import StreamBotLogo from "../assets/images/streamer-bot-logo.png";
 import { useRef, useState } from "react";
 import chroma from "chroma-js";
 import ObsModal from "../components/obs/obsModal";
+import StreamerBotModal from "../components/streamerbot/streamerbotModal";
 import TwitchModal from "../components/twitch/twitchModal";
 import MusicModal from "../components/music/musicModal";
 import { useDispatch } from "react-redux";
 import { ReduxDispatch } from "@/redux/store";
 import toast from "react-hot-toast";
-import { t } from "@tauri-apps/api/event-30ea0228";
 
-const clientNames = ["twitch", "music", "obs", "streamdeck"] as const;
+const clientNames = [
+  "twitch",
+  "music",
+  "obs",
+  "streamdeck",
+  "streamerbot",
+] as const;
+type ClientNames = (typeof clientNames)[number];
 interface UserClients {
-  name: (typeof clientNames)[number];
+  name: ClientNames;
   logo: string | JSX.Element;
 }
 
@@ -37,6 +45,10 @@ const clients: UserClients[] = [
     name: "streamdeck",
     logo: StreamDeckLogo,
   },
+  {
+    name: "streamerbot",
+    logo: StreamBotLogo,
+  },
 ];
 
 export default function UserHome() {
@@ -44,11 +56,11 @@ export default function UserHome() {
   const dispatch = useDispatch<ReduxDispatch>();
   const [modalIsOpen, setModalIsOpen] = useState(false);
 
-  const clientRef = useRef<"twitch" | "music" | "obs" | "streamdeck">();
+  const clientRef = useRef<ClientNames>();
 
   function openSection(
     e: React.MouseEvent<HTMLButtonElement>,
-    client: "twitch" | "music" | "obs" | "streamdeck"
+    client: ClientNames
   ) {
     e.preventDefault();
     clientRef.current = client;
@@ -63,35 +75,6 @@ export default function UserHome() {
     setModalIsOpen(false);
   }
 
-  //function to connect to local websocket port 6969
-  function connectToWebsocket() {
-    //create websocket instance
-    const ws = new WebSocket("ws://127.0.0.1:6969");
-
-    //on open
-    ws.onopen = () => {
-      toast("connected to websocket");
-      console.log("connected to websocket");
-    };
-
-    //on message
-    ws.onmessage = (e) => {
-      console.log(e.data);
-    };
-
-    //on close
-    ws.onclose = () => {
-      toast("disconnected from websocket");
-      console.log("disconnected from websocket");
-    };
-
-    //on error
-    ws.onerror = (e) => {
-      toast.error("error connecting to websocket");
-      console.log(e);
-    };
-  }
-
   const ShowClientModal = () => {
     switch (clientRef.current) {
       case "twitch":
@@ -101,10 +84,11 @@ export default function UserHome() {
       case "obs":
         return <ObsModal />;
       case "streamdeck":
-        connectToWebsocket();
         return <div>streamdeck</div>;
+      case "streamerbot":
+        return <StreamerBotModal />;
       default:
-        return <div>default</div>;
+        return <></>;
     }
   };
 
@@ -143,7 +127,7 @@ export default function UserHome() {
               key={index}
               onClick={(e) => openSection(e, client.name)}
               layout
-              className="rounded-full h-20 w-20 bg-white flex items-center justify-center shadow-xl"
+              className="rounded-full h-20 w-20 flex items-center justify-center shadow-xl overflow-hidden"
               initial={{ opacity: 0, y: 50 }}
               animate={{
                 opacity: 1,
@@ -158,11 +142,16 @@ export default function UserHome() {
                 transition: { duration: 0.1, delay: 0 },
               }}
             >
-              {typeof client.logo === "string" ? (
-                <motion.img layout src={client.logo} className="h-3/5 w-3/5" />
-              ) : (
-                client.logo
-              )}
+              <motion.img
+                layout
+                initial={{ opacity: 0.75 }}
+                src={client.logo as string}
+                whileHover={{
+                  opacity: 1,
+                  transition: { duration: 0.1, delay: 0 },
+                }}
+                className="object-cover"
+              />
             </motion.button>
           );
         })}
