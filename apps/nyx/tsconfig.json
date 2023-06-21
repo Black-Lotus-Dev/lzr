@@ -1,0 +1,16 @@
+{
+	"compilerOptions": {
+		"module": "ESNext",
+		"moduleResolution": "Node",
+		"esModuleInterop": true,
+		"resolveJsonModule": true,
+		"noImplicitReturns": true,
+		"noUnusedLocals": true,
+		"outDir": "lib",
+		"strict": true,
+		"target": "ES2020"
+	},
+	"compileOnSave": true,
+	"include": ["src/**/*.ts"],
+	"exclude": ["node_modules", "lib", "../shared"]
+}
