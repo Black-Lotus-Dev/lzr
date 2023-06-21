@@ -11,6 +11,11 @@ node_modules
 //ignore dist folders from apps
 dist
 
+# lib folders
+//ignore lib folders from apps
+lib
+
+
 # testing
 coverage
 
