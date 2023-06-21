@@ -2,18 +2,23 @@
   "name": "lzr",
   "private": true,
   "scripts": {
+    "build": "turbo run build",
+
     "dev": "concurrently \"pnpm run atlas:dev\" \"pnpm run bast:dev\" \"pnpm run test:dev\"",
     "atlas:dev": "cd apps/atlas && pnpm run tauri:dev",
     "bast:dev": "turbo run dev --filter bast",
     "test:dev": "turbo run dev --filter test",
-    "build": "turbo run build",
-    "lint": "turbo run lint",
-    "format": "prettier --write \"**/*.{ts,tsx,md}\""
+
+    "deploy:functions": "firebase deploy --only functions",
+
+    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+    "lint": "turbo run lint"
   },
   "devDependencies": {
     "concurrently": "^8.0.1",
     "eslint": "^7.32.0",
     "eslint-config-custom": "workspace:*",
+    "firebase-tools": "^11.29.0",
     "prettier": "^2.8.8",
     "turbo": "^1.9.9"
   },

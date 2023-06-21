@@ -7,7 +7,6 @@
     "start": "next start",
     "lint": "next lint"
   },
-  "packageManager": "pnpm@7.15.0",
   "dependencies": {
     "@rematch/core": "^2.2.0",
     "@twurple/chat": "^6.2.0",
