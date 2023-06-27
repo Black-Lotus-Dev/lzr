@@ -7,13 +7,11 @@ import StreamDeckLogo from "../assets/images/stream-deck-logo.png";
 import StreamBotLogo from "../assets/images/streamer-bot-logo.png";
 import { useRef, useState } from "react";
 import chroma from "chroma-js";
-import ObsModal from "../components/obs/obsModal";
-import StreamerBotModal from "../components/streamerbot/streamerbotModal";
-import TwitchModal from "../components/twitch/twitchModal";
-import MusicModal from "../components/music/musicModal";
-import { useDispatch } from "react-redux";
-import { ReduxDispatch } from "@/redux/store";
-import toast from "react-hot-toast";
+import ObsModal from "../components/client/obs/obsModal";
+import StreamerBotModal from "../components/client/streamerbot/streamerbotModal";
+import TwitchModal from "../components/client/twitch/twitchModal";
+import MusicModal from "../components/client/music/musicModal";
+import useStreamerBotClient from "@/hooks/useStreamerBotClient";
 
 const clientNames = [
   "twitch",
@@ -52,8 +50,7 @@ const clients: UserClients[] = [
 ];
 
 export default function UserHome() {
-  toast("user home page");
-  const dispatch = useDispatch<ReduxDispatch>();
+  const [clientState, sbClient] = useStreamerBotClient();
   const [modalIsOpen, setModalIsOpen] = useState(false);
 
   const clientRef = useRef<ClientNames>();
@@ -122,12 +119,13 @@ export default function UserHome() {
         className="w-full h-32 flex items-center justify-evenly"
       >
         {clients.map((client, index) => {
+          
           return (
             <motion.button
               key={index}
               onClick={(e) => openSection(e, client.name)}
               layout
-              className="rounded-full h-20 w-20 flex items-center justify-center shadow-xl overflow-hidden"
+              className="relative rounded-full h-20 w-20 flex items-center justify-center shadow-xl"
               initial={{ opacity: 0, y: 50 }}
               animate={{
                 opacity: 1,
@@ -142,6 +140,20 @@ export default function UserHome() {
                 transition: { duration: 0.1, delay: 0 },
               }}
             >
+              {/* badge to indicate if client is running */}
+              {client.name === "streamerbot" && (
+                <motion.div
+                  layout
+                  className="absolute w-4 h-4 rounded-full z-1 right-0 top-0"
+                  animate={{
+                    backgroundColor: clientState.isConnected
+                      ? "#10B981"
+                      : "#EF4444",
+                    transition: { duration: 0.25, delay: 0.25 },
+                  }}
+                />
+              )}
+
               <motion.img
                 layout
                 initial={{ opacity: 0.75 }}
@@ -150,7 +162,7 @@ export default function UserHome() {
                   opacity: 1,
                   transition: { duration: 0.1, delay: 0 },
                 }}
-                className="object-cover"
+                className="object-contain h-14 w-14"
               />
             </motion.button>
           );

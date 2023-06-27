@@ -1,7 +1,7 @@
 import React from "react";
 import { Route, Routes, useNavigate } from "react-router-dom";
 import LandingPage from "./landing";
-import User from "./user";
+import User from "./home";
 import { useEffect } from "react";
 
 import { useDispatch, useStore } from "react-redux";
@@ -83,7 +83,6 @@ export default function App() {
     const reduxStartupPromises = [
       dispatch.twitch.startup(),
       dispatch.music.startup(),
-      dispatch.obs.startup(),
       hub.startup(),
     ];
 

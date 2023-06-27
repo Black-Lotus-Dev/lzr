@@ -1,5 +1,4 @@
-import toast from "react-hot-toast";
-import { getObsWs, obsClient } from "../obs/client";
+import { obsClient } from "../obs/client";
 
 function ToggleCameraHDisplay(shouldShow: boolean) {
   obsClient.obsWs.call("SetSourceFilterEnabled", {
@@ -45,13 +44,6 @@ export async function SwitchToVerticalCamera() {
   }
 }
 
-export async function StartShroomTime() {
-  toast("Starting Shroom Time");
-}
-
 export function HubEventHandler(event, data) {
-  if (event === "obs-switch-camera") {
-    if (data.camera === "H") SwitchToHorizontalCamera();
-    else if (data.camera === "V") SwitchToVerticalCamera();
-  }
+  console.log("HubEventHandler", event, data);
 }

@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { getStreamerBotClient } from "@lzrClients/streamerbot/client";
+import { obsClient } from "@lzrClients/obs/client";
 import { ReduxRootState } from "@/redux/store";
 import { useStore } from "react-redux";
 import { useAuth } from "reactfire";
@@ -9,20 +9,20 @@ export default function ObsModal() {
   const auth = useAuth();
   const store = useStore<ReduxRootState>();
 
-  const sbClient = getStreamerBotClient();
+  const { password, port, ip } = obsClient.getWsConfig();
 
-  const { host, port, endpoint } = sbClient.getWsConfig();
-
-  const addressRef = useRef<string>(host);
+  const passwordRef = useRef<string>(password);
   const portRef = useRef<number>(port);
-  const endpointRef = useRef<string>(endpoint);
+  const ipRef = useRef<string>(ip);
 
   async function saveSettings() {
-    sbClient.updateWsConfig({
-      host: addressRef.current,
+    const res = await obsClient.updateWsConfig({
+      password: passwordRef.current,
       port: portRef.current,
-      endpoint: endpointRef.current,
+      ip: ipRef.current,
     });
+
+    console.log(res);
   }
 
   return (
@@ -40,28 +40,38 @@ export default function ObsModal() {
         transition: { duration: 0.25, ease: "easeInOut" },
       }}
     >
+      {/* floating action button for toggle obs autostart */}
+      <motion.div className="flex w-full max-w-xs justify-end mb-2">
+        <motion.button
+          onClick={() => obsClient.toggleConnectOnStartup()}
+          className="btn btn-outline"
+        >
+          {obsClient.state.connectOnStartup ? "Disable" : "Enable"} Autostart
+        </motion.button>
+      </motion.div>
+
       <motion.div className="flex-1 flex-row form-control w-full max-w-xs gap-5">
         <motion.div className="flex flex-auto flex-col">
           <label className="label">
-            <span className="label-text">Address</span>
+            <span className="label-text">Server Ip</span>
           </label>
           <input
-            defaultValue={addressRef.current}
+            defaultValue={ip}
             type="text"
-            placeholder="127.0.0.1"
+            placeholder="192.168.1.224"
             className="input input-bordered w-full max-w-xs"
-            onInput={(e) => (endpointRef.current = e.currentTarget.value)}
+            onInput={(e) => (ipRef.current = e.currentTarget.value)}
           />
         </motion.div>
 
         <motion.div className="flex w-32 flex-col">
           <label className="label">
-            <span className="label-text">Port</span>
+            <span className="label-text">Server Port</span>
           </label>
           <input
-            defaultValue={portRef.current}
-            type="number"
-            placeholder="8000"
+            defaultValue={port}
+            type="text"
+            placeholder="4455"
             className="input input-bordered w-full max-w-xs"
             onInput={(e) => (portRef.current = Number(e.currentTarget.value))}
           />
@@ -70,13 +80,14 @@ export default function ObsModal() {
 
       <motion.div className="flex-1 form-control w-full max-w-xs">
         <label className="label">
-          <span className="label-text">Endpoint</span>
+          <span className="label-text">Server Password</span>
         </label>
         <input
-          defaultValue={endpointRef.current}
+          defaultValue={password}
           type="text"
+          placeholder="****************"
           className="input input-bordered w-full max-w-xs"
-          onInput={(e) => (endpointRef.current = e.currentTarget.value)}
+          onInput={(e) => (passwordRef.current = e.currentTarget.value)}
         />
       </motion.div>
 

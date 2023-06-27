@@ -5,45 +5,61 @@ import OBSWebSocket from "obs-websocket-js";
 import toast from "react-hot-toast";
 import { BehaviorSubject, pairwise, switchMap, of } from "rxjs";
 
+interface WebSocketConfig {
+  password: string;
+  ip: string;
+  port: number;
+}
 interface ObsStore {
-  wsPassword: string;
-  wsIp: string;
-  wsPort: string;
+  wsConfig: WebSocketConfig;
+  connectOnStartup: boolean;
+}
+
+interface ObsState {
+  isConnected: boolean;
+  wsConfig: WebSocketConfig;
+  connectOnStartup: boolean;
 }
 
 export class OBSClient {
   public wsSubscribers: any[] = [];
   public store: LzrStore<ObsStore>;
   public obsWs: OBSWebSocket = new OBSWebSocket();
-
-  public state = {
-    isConnected: false,
-  };
+  public state: ObsState;
 
   public isReady = false;
 
   //state$ uses rxjs to subscribe to state changes
-  public state$ = new BehaviorSubject<typeof this.state>(this.state);
+  public state$: BehaviorSubject<ObsState>;
 
   //this var handles the polling for the connection state
   public connectionPoll: NodeJS.Timer;
+  constructor() {
+    createLzrStore("obs", {
+      wsConfig: {
+        ip: "192.168.1.224",
+        password: "",
+        port: 4455,
+      },
+      connectOnStartup: false,
+    }).then((store) => {
+      this.store = store as LzrStore<ObsStore>;
+      this.configureClient();
+    });
+  }
+
+  configureClient() {
+    this.state = {
+      isConnected: false,
+      connectOnStartup: this.store.state.connectOnStartup,
+      wsConfig: this.store.state.wsConfig,
+    };
+
+    this.state$ = new BehaviorSubject<ObsState>(this.state);
+    this.startup();
+  }
 
   async startup() {
-    this.store = await createLzrStore("obs");
-    const { isConnected } = await this.state;
-    if (isConnected) this.obsWs.disconnect();
-
-    //create a listener for when the connection state changes
-    this.obsWs.on("ConnectionOpened", async () => {
-      this.obsWs.on("Identified", () => {
-        this.state$.next({ isConnected: true });
-      });
-    });
-
-    this.obsWs.on("ConnectionClosed", () => {
-      this.state$.next({ isConnected: false });
-    });
-
     this.state$
       .pipe(
         pairwise(),
@@ -63,13 +79,7 @@ export class OBSClient {
       )
       .subscribe();
 
-    if (!!this.store.state.wsPassword) {
-      //connect to obs if the password is already set
-      const { wsPassword, wsIp, wsPort } = this.store.state;
-      this.connect(wsIp, wsPort, wsPassword).catch((e) => {
-        this.startReconnectPoll();
-      });
-    }
+    this.state.connectOnStartup && this.connect();
   }
 
   async notifyWsSubscribers() {
@@ -78,35 +88,49 @@ export class OBSClient {
     });
   }
 
-  public startReconnectPoll() {
-    this.connectionPoll = setInterval(() => {
-      const { wsPassword, wsIp, wsPort } = this.store.state;
-      this.connect(wsIp, wsPort, wsPassword).then((e) => {
-        clearInterval(this.connectionPoll);
+  async connect(wsConfig?: WebSocketConfig) {
+    this.state.isConnected && this.obsWs.disconnect();
+    const { ip, password, port } = wsConfig || this.store.state.wsConfig;
+
+    this.obsWs.connect(`ws://${ip}:${port}`, password).catch((err) => {
+      console.debug(err);
+      toast.error("OBS failed to connect");
+
+      //if the connection fails, try again in 30 seconds
+      setTimeout(() => {
+        this.connect();
+      }, 30000);
+
+      this.state$.next({
+        ...this.state,
+        isConnected: false,
       });
-    }, 5000);
-  }
-
-  connect = async (wsIp: string, wsPort: string, wsPass: string) =>
-    this.obsWs.connect(`ws://${wsIp}:${wsPort}`, wsPass);
-
-  public getObsWsSettings() {
-    const { wsIp, wsPort, wsPassword } = this.store.state;
-    return { wsIp, wsPort, wsPassword };
-  }
-
-  public async updateObsWsSettings(
-    wsIp: string,
-    wsPort: string,
-    wsPassword: string
-  ) {
-    this.store.update({
-      wsIp,
-      wsPort,
-      wsPassword,
     });
+  }
 
-    return await this.connect(wsIp, wsPort, wsPassword);
+  public toggleConnectOnStartup() {
+    const { connectOnStartup } = this.store.state;
+    const newConnectOnStartup = !connectOnStartup;
+
+    this.store.update({ connectOnStartup: newConnectOnStartup })
+    .then(() => {
+      this.state$.next({
+        ...this.state,
+        connectOnStartup: newConnectOnStartup,
+      });
+
+      newConnectOnStartup && !this.state.isConnected && this.connect();
+    });
+  }
+
+  public getWsConfig() {
+    return this.store.state.wsConfig;
+  }
+
+  public async updateWsConfig(wsConfig: WebSocketConfig) {
+    this.store.update({ wsConfig }).then(() => {
+      this.connect();
+    });
   }
 
   public async getCurrentScene() {
