@@ -7,7 +7,7 @@ import {
 } from "../client";
 import ChatOverlayHandler from "./chat-overlay";
 import { commands } from "./commands";
-import { musicClient } from "@/lzrClients/music/client";
+import { getMusicClient } from "@/lzrClients/music/client";
 
 export type TwitchCommand = {
   name: string;
@@ -22,12 +22,14 @@ export type TwitchCommand = {
 // }
 
 var chatOverlayHandler: ChatOverlayHandler;
+
 export default async function twitchChatHandler(
   channel: string,
   user: string,
   message: string,
   msg: TwitchPrivateMessage
 ) {
+  const musicClient = getMusicClient();
   const chatClient = getChatClient("bot");
   const isBot =
     user.toLowerCase() === getTwitchAccountName("bot").toLowerCase();

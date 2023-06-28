@@ -118,7 +118,7 @@ export class StreamerBotClient {
   }
 
   public async handleWsOnData(data: any){
-
+    console.debug("Data", data);
   }
 
   async connect(wsConfig?: StreamerBotWebSocketConfig) {

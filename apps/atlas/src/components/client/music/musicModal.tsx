@@ -1,8 +1,8 @@
 import chroma from "chroma-js";
 import { AnimatePresence, motion } from "framer-motion";
-import { musicClient } from "@lzrClients/music/client";
+import { getMusicClient } from "@lzrClients/music/client";
 import { ReduxRootState, ReduxDispatch } from "@/redux/store";
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { useStore, useDispatch } from "react-redux";
 import { useStoreWatch } from "@/utils/storeWatch";
 import { MusicReduxSlice } from "@/types/redux/music";
@@ -10,6 +10,7 @@ import { useAuth } from "reactfire";
 import { Device } from "spotify-web-api-ts/types/types/SpotifyObjects";
 
 function SpotifyLogin() {
+  const musicClient = getMusicClient();
   function linkSpotifyAccount() {
     musicClient.spotify.login();
   }

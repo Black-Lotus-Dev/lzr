@@ -3,27 +3,22 @@ import { createModel } from "@rematch/core";
 import { RootModel } from "../models";
 import { MusicReduxSlice } from "@lzrTypes/redux/music";
 import MusicLZRSlice from "@lzrTypes/store/music";
-import { musicClient } from "@lzrClients/music/client";
+import { getMusicClient, type LZRMusicState } from "@lzrClients/music/client";
 import { SpotifyState } from "@lzrClients/music/spotify";
+
+const musicClient = getMusicClient();
+const initialState: MusicReduxSlice = {
+  isReady: false,
+  isLocalReady: false,
+  isSpotifyReady: false,
+  clientState: musicClient.state,
+  spotifyState: musicClient.spotify.state,
+};
 
 export default () => {
   return createModel<RootModel>()({
     name: "music",
-    state: {
-      isReady: false,
-      isLocalReady: true,
-      isSpotifyReady: false,
-      clientState: {
-        autoPlay: true,
-        queue: [],
-        currentIndex: -1,
-      },
-      spotifyState: {
-        isPlaying: false,
-        isConnected: false,
-        account: undefined,
-      },
-    } as MusicReduxSlice,
+    state: initialState,
     reducers: {
       setIsReady(state) {
         return {
@@ -62,7 +57,7 @@ export default () => {
           ...state,
         };
       },
-      updateClientState(state, payload: typeof musicClient["state"]) {
+      updateClientState(state, payload: LZRMusicState) {
         return {
           ...state,
           clientState: {

@@ -1,10 +1,19 @@
 /* eslint-disable import/no-cycle */
-import { LocalMusicProps } from "@lzrTypes/music/local/props";
+import { LocalMusicClient } from "@lzrTypes/music/local/props";
 
-class LZRLocalClient {
+class LZRLocalMusicClient {
+  private static instance: LZRLocalMusicClient;
+  
+  public static getInstance(): LZRLocalMusicClient {
+    if (!LZRLocalMusicClient.instance) {
+      LZRLocalMusicClient.instance = new LZRLocalMusicClient();
+    }
+    return LZRLocalMusicClient.instance;
+  }
+
   // public dispatch?: Dispatch;
 
-  public settings: LocalMusicProps = {
+  public settings: LocalMusicClient = {
     musicDirs: [],
     albums: [],
     tracks: [],
@@ -16,4 +25,6 @@ class LZRLocalClient {
   constructor() {}
 }
 
-export default LZRLocalClient;
+
+const getLocalMusicClient = () => LZRLocalMusicClient.getInstance();
+export { getLocalMusicClient, type LZRLocalMusicClient  };

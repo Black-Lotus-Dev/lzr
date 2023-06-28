@@ -1,7 +1,6 @@
 import { waitForLZRRoom } from "@utils/rtc";
 import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useState, useRef } from "react";
-import { ActionReceiver } from "trystero";
 import { TwitchPrivateMessage } from "@twurple/chat/lib/commands/TwitchPrivateMessage";
 import { ChatMsg } from "@components/chat-overlay/chat-msg";
 
@@ -21,7 +20,7 @@ export default function ChatOverlay() {
 
   useEffect(() => {
     //if we hit the max messages, remove the oldest message
-    if (messages.length >= 10) {
+    if (messages.length >= 6) {
       setMessages((prev) => prev.slice(0, prev.length - 1));
     }
   }, [messages]);
@@ -55,7 +54,7 @@ export default function ChatOverlay() {
     >
       <motion.div
         layout
-        className="h-[700px] w-[450px] rounded-xl overflow-hidden"
+        className="h-[460px] w-[450px] rounded-xl overflow-hidden"
       >
         <motion.ul
           layout

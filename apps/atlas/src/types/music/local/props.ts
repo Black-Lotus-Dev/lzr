@@ -20,7 +20,7 @@ interface LocalPlaylist {
   tracks: LocalTrack[];
 }
 
-interface LocalMusicProps {
+interface LocalMusicClient {
   musicDirs: string[];
   albums: LocalAlbum[];
   tracks: LocalTrack[];
@@ -28,4 +28,4 @@ interface LocalMusicProps {
   playlists: LocalPlaylist[];
 }
 
-export type { LocalMusicProps, LocalTrack, LocalAlbum, LocalArtist, LocalPlaylist};
+export type { LocalMusicClient, LocalTrack, LocalAlbum, LocalArtist, LocalPlaylist};

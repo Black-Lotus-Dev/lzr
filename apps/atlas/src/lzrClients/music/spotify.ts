@@ -18,6 +18,8 @@ import { fetchApi } from "@utils/fetchApi";
 import { GetRefreshableUserTokensResponse } from "spotify-web-api-ts/types/types/SpotifyAuthorization";
 import { createLzrStore } from "@/utils/lzrStore";
 import { fbApp } from "@/configs/firebase";
+import { toast } from "react-hot-toast";
+import { GetMyPlaylistsResponse } from "spotify-web-api-ts/types/types/SpotifyResponses";
 
 type DevicesResult = {
   devices: Device[];
@@ -53,7 +55,6 @@ class LZRSpotifyClient {
     isPlaying: boolean,
     newSong: LZRSongItem
   ) => void;
-  public handleNextQueueSong: () => void;
 
   public state: SpotifyState = {
     isPlaying: false,
@@ -75,11 +76,9 @@ class LZRSpotifyClient {
 
   async startup(
     currentSongUpdater: typeof this.parentCurrentSongUpdater,
-    handleNextQueueSong: typeof this.handleNextQueueSong
   ) {
     this.store = await createLzrStore<SpotifyStoreState>("spotify");
     this.parentCurrentSongUpdater = currentSongUpdater;
-    this.handleNextQueueSong = handleNextQueueSong;
 
     this.state$
       .pipe(
@@ -107,48 +106,55 @@ class LZRSpotifyClient {
     this.autoLogin();
   }
 
+  async getUserPlaylists() {
+    var playlists: GetMyPlaylistsResponse["items"] = [];
+      
+    const totalPlaylistCount = (await this.api.playlists.getMyPlaylists()).total;
+    
+    //loop through and get any remaining playlists       
+    while(playlists.length < totalPlaylistCount) {
+      const playlistRes = (await this.api.playlists.getMyPlaylists({
+        limit: 50,
+        offset: playlists.length,
+      }));
+
+      playlists = playlists.concat(playlistRes.items);
+    }
+    
+    //console log all the playlist names
+    console.log(playlists.map(p => p.name));
+  }
+
   async currentSongHandler(currentApiSong: CurrentlyPlaying) {
+
     const { currentSong: currStateSong } = this.state;
 
     const isPlaying = currentApiSong.is_playing;
-    let currentSong = undefined;
+    const newSong = this.convertToBaseSong(
+      currentApiSong.item as Track | null,
+      currentApiSong.progress_ms
+    );
 
-    if (isPlaying) {
-      const newSong = this.convertToBaseSong(
-        currentApiSong.item as Track,
-        currentApiSong.progress_ms
-      );
+    const isSongChange = isPlaying && !_.isEqual(currStateSong?.uri, newSong?.uri);
 
-      const sameSong =
-        currStateSong !== undefined
-          ? _.isEqual(currStateSong?.uri, newSong?.uri)
-          : false;
-      if (sameSong) {
-        //check buffer difference
-        const assumedOffset =
-          currStateSong.progress + this.currentSongPollTimer;
-        const extraOffset = currentApiSong.progress_ms - assumedOffset;
+    if (isSongChange) {
+      //check buffer difference
+      const assumedOffset =
+        currStateSong.progress + this.currentSongPollTimer;
+      const extraOffset = currentApiSong.progress_ms - assumedOffset;
 
-        const progressOffset = Math.abs(extraOffset);
+      const progressOffset = Math.abs(extraOffset);
 
-        //if the progress is offset by more than our buffer then we should update the song
-        const progressBuffer =
-          this.currentSongPollTimer + this.currentSongOffsetBuffer;
-        if (progressOffset > progressBuffer) {
-          currentSong = newSong;
-        } else {
-          return;
-        }
-      } else {
-        //if the songs are different then update the song
-        currentSong = newSong;
-      }
+      //if the offset is under our buffer then skip the update
+      const progressBuffer =
+        this.currentSongPollTimer + this.currentSongOffsetBuffer;
+      if (progressOffset < progressBuffer) return;
     }
-
+    
     this.state$.next({
       ...this.state,
       isPlaying,
-      currentSong,
+      currentSong: newSong,
     });
   }
 
@@ -162,33 +168,8 @@ class LZRSpotifyClient {
       //spotify specific code
       const currentSpotifySong =
         await this.api.player.getCurrentlyPlayingTrack();
-
-      //if for some reason were playing but theres no current song then skip
-      if (
-        typeof currentSpotifySong === "string" ||
-        currentSpotifySong.item === undefined
-      ) {
-        //somehow we stopped playing so update our state
-        if (this.state.isPlaying) {
-          this.state$.next({
-            ...this.state,
-            isPlaying: false,
-            currentSong: undefined,
-          });
-        }
-        return;
-      }
-
-      const remainingTime =
-        currentSpotifySong.item.duration_ms - currentSpotifySong.progress_ms;
-
-      if (this.musicQueueListener !== null)
-        clearTimeout(this.musicQueueListener);
-      this.musicQueueListener = setTimeout(async () => {
-        if (this.musicQueueListener !== null)
-          clearTimeout(this.musicQueueListener);
-        this.handleNextQueueSong();
-      }, remainingTime - 2000);
+      
+      if(!currentSpotifySong || typeof currentSpotifySong === "string") return;
 
       //if we're playing and the song is different then update our state
       this.currentSongHandler(currentSpotifySong);
@@ -360,9 +341,10 @@ class LZRSpotifyClient {
   }
 
   convertToBaseSong(spotifySong: Track | null, progress = 0): LZRSpotifySong {
-    if (spotifySong === null) return null;
+    if (spotifySong === null) return;
 
     return {
+      id: spotifySong.id,
       uri: spotifySong.uri,
       name: spotifySong.name,
       artists: spotifySong.artists.map((a) => a.name),

@@ -1,6 +1,6 @@
 import { TwitchCommand } from "../commandHandler";
 import { getChatClient } from "../../client";
-import { musicClient } from "@lzrClients/music/client";
+import { getMusicClient } from "@lzrClients/music/client";
 import { CommandHandlerProps } from ".";
 
 export async function songSearch({
@@ -9,6 +9,8 @@ export async function songSearch({
   user,
 }: CommandHandlerProps) {
   const chatClient = getChatClient("bot");
+  const musicClient = getMusicClient();
+
   const song = await musicClient.songSearch(command.args.join(" "));
 
   chatClient.say(
@@ -23,6 +25,8 @@ export async function songRequest({
   user,
 }: CommandHandlerProps) {
   const chatClient = getChatClient("bot");
+  const musicClient = getMusicClient();
+
   const songRes = await musicClient.songSearch(command.args.join(" "));
   musicClient.addSongToQueue(songRes, user);
 
@@ -34,6 +38,8 @@ export async function songRequest({
 
 export function getCurrentSong({ channel, user }: CommandHandlerProps) {
   const chatClient = getChatClient("bot");
+  const musicClient = getMusicClient();
+
   const currentSong = musicClient.state.currentSong;
   if (currentSong) {
     chatClient.say(
@@ -49,6 +55,8 @@ export function getCurrentSong({ channel, user }: CommandHandlerProps) {
 
 export function getNextSongInQueue({ channel, user }: CommandHandlerProps) {
   const chatClient = getChatClient("bot");
+  const musicClient = getMusicClient();
+
   const queue = musicClient.state.queue;
   if (queue.length > 0) {
     const nextSong = queue[0];
@@ -65,6 +73,8 @@ export function getNextSongInQueue({ channel, user }: CommandHandlerProps) {
 
 export function getSongHistory({ channel, user }: CommandHandlerProps) {
   const chatClient = getChatClient("bot");
+  const musicClient = getMusicClient();
+
   const history = musicClient.state.history;
   if (history.length > 0) {
     const allSongs = history.map((song) => {
@@ -82,6 +92,7 @@ export function getSongHistory({ channel, user }: CommandHandlerProps) {
 
 export function getSongQueue({ channel, user }: CommandHandlerProps) {
   const chatClient = getChatClient("bot");
+  const musicClient = getMusicClient();
 
   const queue = musicClient.state.queue;
   if (queue.length > 0) {
