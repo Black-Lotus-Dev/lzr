@@ -1,10 +1,9 @@
 import { waitForLZRRoom } from "@utils/rtc";
 import { useEffect, useState } from "react";
-import toast from "react-hot-toast";
 
 export default function CameraOverlay() {
-  const [followerCount, setFollowerCount] = useState("0");
-  const [viewerCount, setViewerCount] = useState("0");
+  const [followerCount, setFollowerCount] = useState(0);
+  const [viewerCount, setViewerCount] = useState(0);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -13,15 +12,12 @@ export default function CameraOverlay() {
       const viewerChannel = guest.createChannel<number>("viewerCount");
 
       followChannel.get((res) => {
-        console.log(res);
-        setFollowerCount(res);
+        setFollowerCount(Number(res));
       });
 
       viewerChannel.get((res) => {
-        viewerChannel.send(res);
+        setViewerCount(res);
       });
-
-      followChannel.send("get");
     });
   }, []);
 

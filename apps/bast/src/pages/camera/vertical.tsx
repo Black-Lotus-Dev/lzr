@@ -12,11 +12,11 @@ export default function CameraOverlay() {
       const viewerChannel = guest.createChannel<number>("viewerCount");
 
       followChannel.get((res) => {
-        followChannel.send(res);
+        setFollowerCount(Number(res));
       });
 
       viewerChannel.get((res) => {
-        viewerChannel.send(res);
+        setViewerCount(res);
       });
     });
   }, []);

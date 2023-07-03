@@ -126,30 +126,22 @@ class LZRSpotifyClient {
   }
 
   async currentSongHandler(currentApiSong: CurrentlyPlaying) {
-
-    const { currentSong: currStateSong } = this.state;
-
     const isPlaying = currentApiSong.is_playing;
     const newSong = this.convertToBaseSong(
       currentApiSong.item as Track | null,
       currentApiSong.progress_ms
     );
 
-    const isSongChange = isPlaying && !_.isEqual(currStateSong?.uri, newSong?.uri);
+    //check buffer difference
+    const assumedOffset = newSong.progress + this.currentSongPollTimer;
+    const extraOffset = currentApiSong.progress_ms - assumedOffset;
 
-    if (isSongChange) {
-      //check buffer difference
-      const assumedOffset =
-        currStateSong.progress + this.currentSongPollTimer;
-      const extraOffset = currentApiSong.progress_ms - assumedOffset;
+    const progressOffset = Math.abs(extraOffset);
 
-      const progressOffset = Math.abs(extraOffset);
-
-      //if the offset is under our buffer then skip the update
-      const progressBuffer =
-        this.currentSongPollTimer + this.currentSongOffsetBuffer;
-      if (progressOffset < progressBuffer) return;
-    }
+    //if the offset is under our buffer then skip the update
+    const progressBuffer =
+      this.currentSongPollTimer + this.currentSongOffsetBuffer;
+    if (progressOffset < progressBuffer) return;
     
     this.state$.next({
       ...this.state,

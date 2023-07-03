@@ -189,8 +189,6 @@ class LZRHub {
     this.startChatListener();
   }
 
-  private startTwitchObsActions() {}
-
   startChatListener() {
     //pause for 3 seconds to allow the obs bot to connect
     setTimeout(() => {
@@ -218,19 +216,13 @@ class LZRHub {
 
       if (stream !== null) viewerCount = stream.viewers;
 
-      if (this.viewerCount === viewerCount) return;
-
       toast("Viewer count: " + viewerCount);
       this.viewerCount = viewerCount;
       viewerCountAction.send(viewerCount);
     }, 10000);
   }
 
-  private stopViewerCountListener() {
-    this.viewerCountListener && clearInterval(this.viewerCountListener);
-  }
-
-  async getFollowerCount(lastCount: number = 0) {
+  async getFollowerCount() {
     const followerChannel = this.lzrRoom.createChannel<number>("followCount");
     const twitchChannelId = mainTwitchClient.account.id;
     const follows = await mainTwitchClient.api.channels.getChannelFollowers(
@@ -239,13 +231,11 @@ class LZRHub {
     );
     const { total } = follows;
 
-    if (lastCount === total) return;
     followerChannel.send(total);
 
-    //recall every 5 minutes
     setTimeout(() => {
-      this.getFollowerCount(total);
-    }, 300000);
+      this.getFollowerCount();
+    }, 30000);
   }
 }
 
